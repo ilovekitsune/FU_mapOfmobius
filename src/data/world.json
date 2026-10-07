@@ -1,0 +1,270 @@
+{
+  "settings": {
+    "initialDay": 0,
+    "initialSelectedId": "iron-blood",
+    "cycleDays": 365,
+    "orbit": {
+      "centerX": 600,
+      "centerY": 390,
+      "radiusX": 410,
+      "radiusY": 250,
+      "direction": 1
+    },
+    "timeline": {
+      "startDay": 0,
+      "endDay": 365,
+      "step": 1,
+      "marks": [0],
+      "yearLabel": "MS 399年",
+      "heading": "世界時序 · ManaSteam",
+      "resetLabel": "回到起點",
+      "previousDayLabel": "←",
+      "nextDayLabel": "→",
+      "previousDayAriaLabel": "前一天",
+      "nextDayAriaLabel": "後一天",
+      "sliderAriaLabel": "選擇世界日期",
+      "dayLabel": "旅行日",
+      "eventDayPrefix": "第",
+      "nextEventPrefix": "下一事件",
+      "locationButtonLabel": "查看地點",
+      "emptyTitle": "虛空仍在等待",
+      "emptyDescription": "旅途仍在前進，世界的命運等待被書寫。",
+      "quietLabel": "靜默日",
+      "eventTypeLabels": {
+        "story": "主線事件",
+        "meeting": "交會事件",
+        "warning": "異常徵兆"
+      },
+      "eventTypeIcons": {
+        "story": "✦",
+        "meeting": "↔",
+        "warning": "!"
+      }
+    },
+    "continentDrift": {
+      "meetingApproachDays": 4,
+      "innerMeetingGapRatio": 0.5,
+      "edgeMeetingGapRatio": 0.5
+    },
+    "islandDrift": {
+      "daysPerCycle": 4
+    },
+    "travel": {
+      "flightDistancePerDay": 100,
+      "minimumFlightDays": 2,
+      "walkDistancePerHour": 30,
+      "minimumWalkHours": 1,
+      "innerMeetingFlightDays": 1,
+      "flightLabel": "飛行",
+      "portalLabel": "傳送法陣",
+      "walkLabel": "步行",
+      "instantLabel": "瞬間",
+      "unavailableLabel": "大陸未接觸"
+    }
+  },
+  "continents": [
+    {
+      "id": "iron-blood-continent",
+      "name": "艾倫布萊德",
+      "subtitle": "鋼鐵巨塔，帶著傷口啟程",
+      "shape": "circle",
+      "width": 100,
+      "height": 100,
+      "rotation": -12,
+      "orbitAngle": 210,
+      "countryIds": ["iron-blood"],
+      "description": "以蒸汽與齒輪打造的機動人造大陸。這座三十三層的巨塔能沿莫比烏斯環有限的自主移動；",
+      "meetings": [
+        { "day": 8, "mode": "inner" },
+        { "day": 19, "mode": "edge" }
+      ]
+    },
+    {
+      "id": "north-fragment",
+      "name": "未知大陸",
+      "subtitle": "國度與傳聞，留待旅人書寫",
+      "shape": "rectangle",
+      "width": 100,
+      "height": 100,
+      "rotation": 9,
+      "orbitAngle": 315,
+      "countryIds": [],
+      "description": "漂流在莫比烏斯環北段的破碎大陸，將於第八旅行日與艾倫布萊德在環內上下交會。",
+      "meetings": [{ "day": 8, "mode": "inner" }]
+    },
+    {
+      "id": "south-fragment",
+      "name": "未知大陸",
+      "subtitle": "尚未命名的遠方",
+      "shape": "正方形",
+      "width": 100,
+      "height": 100,
+      "rotation": 4,
+      "orbitAngle": 65,
+      "countryIds": [],
+      "description": "位於莫比烏斯環南段的碎陸，旅行者們還未知曉其存在。步行通路只會在大陸實際相接時出現；",
+      "meetings": [{ "day": 19, "mode": "edge" }]
+    },
+    {
+      "id": "unknown-fragment1",
+      "name": "未知大陸",
+      "subtitle": "尚未命名的遠方",
+      "shape": "irregular",
+      "width": 150,
+      "height": 153,
+      "rotation": 7,
+      "orbitAngle": 145,
+      "countryIds": [],
+      "description": "位於莫比烏斯環南段的漂流大陸，旅行者們還未知曉其存在。步行通路只會在大陸實際相接時出現；",
+      "meetings": [{ "day": 300, "mode": "edge" }]
+    }
+  ],
+  "countries": [
+    {
+      "id": "iron-blood_high",
+      "name": "塔頂 1–11 層",
+      "continentId": "iron-blood-continent",
+      "motto": "齒輪轉動，秩序不滅。我即是秩序",
+      "status": "正常",
+      "capital": "中央齒輪塔",
+      "description": "艾倫布萊德的上層貴族居所，掌握超過 99% 的資源，並以此維持奢糜的生活。",
+      "color": "#FF6B8B",
+      "details": [
+        { "label": "塔頂 1–11 層", "value": "上層貴族居所；約占人口 5%，掌握超過 99% 的資源" },
+        { "label": "未解鎖", "value": "???" },
+        { "label": "未解鎖", "value": "???" }
+
+      ]
+    },{
+      "id": "iron-blood_middle",
+      "name": "中段 12–22 層",
+      "continentId": "iron-blood-continent",
+      "motto": "承上啟下，齒輪不會停下。",
+      "status": "正常",
+      "capital": "????",
+      "description": "艾倫布萊德的中層商業與科研區，掌握少量資源。 主要的營運與管理單位位於此，並掌握塔內的門禁系統。",
+      "color": "#99E6FF",
+      "details": [
+        { "label": "政體與入港", "value": "執政官核驗外來者身分，並依身分分配居所；塔內各區設有門禁" },
+        { "label": "科技與魔法", "value": "高科技、低魔法；魔法僅作為機械動力電池" },
+        { "label": "中段 12–22 層", "value": "中層商業與科研區；約占人口 15%" },
+        { "label": "糧食與航運", "value": "農業空間稀少，糧食優先供給貴族；擁有最完整的飛行載具" },
+        { "label": "魔法探勘集團", "value": "由中高階貴族設立，招募各地冒險者探索地下城、尋找魔力核心；小隊配有飛空艇" },
+        { "label": "未解鎖", "value": "???" },
+        { "label": "未解鎖", "value": "???" }
+      ]
+    },{
+      "id": "iron-blood_low",
+      "name": "塔底 23–33 層",
+      "continentId": "iron-blood-continent",
+      "motto": "無論是誰，總有一天都會被齒輪碾碎。",
+      "status": "破敗",
+      "capital": "????",
+      "description": "艾倫布萊德的下層工業與勞動區，掌握忽略不計的資源。這裡是社會的底層，生活條件艱苦。",
+      "color": "#BFF2BB",
+      "details": [
+        { "label": "塔底 23–33 層", "value": "下層工業與勞動區；約占人口 80%，廢水、污濁空氣與治安問題交織" },
+        { "label": "未解鎖", "value": "???" },
+        { "label": "未解鎖", "value": "???" }
+      ]
+    }
+  ],
+  "islands": [
+    {
+      "id": "raven",
+      "name": "未知空島",
+      "x": 589,
+      "y": 165,
+      "size": 25,
+      "movement": "drifting",
+      "dungeon": "未知地城",
+      "description": "謠言說這裡是一座無人能長久追蹤的空島，島底垂掛著一座倒懸的古老修道院。",
+      "phase": 0.4
+    },
+    {
+      "id": "bell",
+      "name": "未知空島",
+      "x": 891,
+      "y": 489,
+      "size": 20,
+      "movement": "drifting",
+      "dungeon": "未知地城",
+      "description": "謠言說這裡島心有一口從未敲響的巨鐘。島嶼每隔數小時便會改變方向。",
+      "phase": 1.7
+    },
+    {
+      "id": "lantern",
+      "name": "未知空島",
+      "x": 347,
+      "y": 573,
+      "size": 17,
+      "movement": "anchored",
+      "description": "謠言說這裡是被古代鐵鏈固定在航路旁的小島，是冒險者最後的補給站。",
+      "phase": 2.5
+    },
+    {
+      "id": "wound",
+      "name": "未知空島",
+      "x": 1031,
+      "y": 253,
+      "size": 15,
+      "movement": "drifting",
+      "dungeon": "未知地城",
+      "description": "謠言說這裡是一座環繞著空間裂縫的微型浮島，接近時會聽見尚未發生的記憶。",
+      "phase": 3.3
+    }
+  ],
+  "events": [
+    {
+      "day": 0,
+      "title": "命運的起始：艾倫布萊德",
+      "description": "MS 399 年，命運引領著旅人抵達於此。",
+      "locationId": "iron-blood",
+      "type": "story"
+    },{
+      "day": 365,
+      "title": "一年的結束",
+      "description": "旅人相遇一周年。",
+      "locationId": "iron-blood",
+      "type": "story"
+    }
+
+  ],
+  "history": [
+    {
+      "date": "MS 前",
+      "title": "神明之戰",
+      "description": "魔法世界的神明彼此開戰，留下足以動搖神明層級的魔法遺產。"
+    },
+    {
+      "date": "MS 前",
+      "title": "機械叛亂",
+      "description": "機械世界的人工智慧造物發起叛亂，機械文明從此不再相信造物主。"
+    },
+    {
+      "date": "MS 前 13 年",
+      "title": "雙世界大戰",
+      "description": "魔法世界與機械世界全面交戰，兩種文明都付出慘痛代價。"
+    },
+    {
+      "date": "MS 前 7 年",
+      "title": "虛空海與地下城出現",
+      "description": "發光、會侵蝕固體的虛空海現世；漂浮空島與地下城也隨之出現。"
+    },
+    {
+      "date": "MS 前 6 年",
+      "title": "地下城大戰",
+      "description": "各方勢力為地下城與其中的魔力核心開戰，舊世界秩序走向終結。"
+    },
+    {
+      "date": "MS 元年",
+      "title": "新世界紀年",
+      "description": "倖存者建立新世界，啟用 ManaSteam（MS）紀年。"
+    },
+    {
+      "date": "MS 399 年",
+      "title": "幻影旅團出場",
+      "description": "一群旅人結伴出發"
+    }
+  ]
+}
