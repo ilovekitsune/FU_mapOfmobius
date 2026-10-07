@@ -96,7 +96,7 @@
       "id": "south-fragment",
       "name": "未知大陸",
       "subtitle": "尚未命名的遠方",
-      "shape": "正方形",
+      "shape": "square",
       "width": 100,
       "height": 100,
       "rotation": 4,
