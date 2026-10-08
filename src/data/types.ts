@@ -1,6 +1,7 @@
 export interface ContinentMeeting {
   day: number;
   mode: "inner" | "edge";
+  targetContinentId?: string;
 }
 
 export interface Continent {
@@ -12,6 +13,7 @@ export interface Continent {
   height: number;
   rotation: number;
   orbitAngle: number;
+  movement: "drifting" | "anchored";
   countryIds: string[];
   description: string;
   meetings: ContinentMeeting[];

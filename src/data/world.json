@@ -68,17 +68,32 @@
       "name": "艾倫布萊德",
       "subtitle": "鋼鐵巨塔，帶著傷口啟程",
       "shape": "circle",
-      "width": 100,
-      "height": 100,
+      "width":80,
+      "height": 80,
       "rotation": -12,
       "orbitAngle": 210,
-      "countryIds": ["iron-blood"],
+      "movement": "drifting",
+      "countryIds": ["iron-blood_high", "iron-blood_middle", "iron-blood_low"],
       "description": "以蒸汽與齒輪打造的機動人造大陸。這座三十三層的巨塔能沿莫比烏斯環有限的自主移動；",
       "meetings": [
         { "day": 8, "mode": "inner" },
         { "day": 19, "mode": "edge" }
       ]
+    },{
+      "id": "silver-jade-continent",
+      "name": "輝玉帝國",
+      "subtitle": "被龍神「貪婪」祝福的國度",
+      "shape": "irregular",
+      "width": 120,
+      "height": 80,
+      "rotation": 12,
+      "orbitAngle": 45,
+      "movement": "anchored",
+      "countryIds": ["silver-jade_empire"],
+      "description": "輝玉帝國是一個混和中式和日式風格的國度，當世界破碎的那一刻，被這個國家所供奉的龍神「貪婪」保護，因此留存了大片的土地。藉由著保存完好的的陸地和經濟實力，帝國迅速地擴展著他的影響力，成為一個強悍繁榮的地區。而在那之後，龍神沉睡於皇宮的地下神殿之中。",
+      "meetings": []
     },
+    
     {
       "id": "north-fragment",
       "name": "未知大陸",
@@ -88,9 +103,13 @@
       "height": 100,
       "rotation": 9,
       "orbitAngle": 315,
+      "movement": "drifting",
       "countryIds": [],
       "description": "漂流在莫比烏斯環北段的破碎大陸，將於第八旅行日與艾倫布萊德在環內上下交會。",
-      "meetings": [{ "day": 8, "mode": "inner" }]
+      "meetings": [
+        { "day": 8, "mode": "inner" },
+        { "day": 30, "mode": "edge", "targetContinentId": "silver-jade-continent" }
+      ]
     },
     {
       "id": "south-fragment",
@@ -101,6 +120,7 @@
       "height": 100,
       "rotation": 4,
       "orbitAngle": 65,
+      "movement": "drifting",
       "countryIds": [],
       "description": "位於莫比烏斯環南段的碎陸，旅行者們還未知曉其存在。步行通路只會在大陸實際相接時出現；",
       "meetings": [{ "day": 19, "mode": "edge" }]
@@ -114,6 +134,7 @@
       "height": 153,
       "rotation": 7,
       "orbitAngle": 145,
+      "movement": "drifting",
       "countryIds": [],
       "description": "位於莫比烏斯環南段的漂流大陸，旅行者們還未知曉其存在。步行通路只會在大陸實際相接時出現；",
       "meetings": [{ "day": 300, "mode": "edge" }]
@@ -166,6 +187,24 @@
         { "label": "塔底 23–33 層", "value": "下層工業與勞動區；約占人口 80%，廢水、污濁空氣與治安問題交織" },
         { "label": "未解鎖", "value": "???" },
         { "label": "未解鎖", "value": "???" }
+      ]
+    },{
+      "id": "silver-jade_empire",
+      "name": "輝玉帝國",
+      "continentId": "silver-jade-continent",
+      "motto": "金錢是一個人力量和地位的象徵。",
+      "status": "繁榮",
+      "capital": "????",
+      "description": "輝玉帝國是一個混和中式和日式風格的國度，當世界破碎的那一刻，被這個國家所供奉的龍神「貪婪」保護，因此留存了大片的土地。藉由著保存完好的的陸地和經濟實力，帝國迅速地擴展著他的影響力，成為一個強悍繁榮的地區。而在那之後，龍神沉睡於皇宮的地下神殿之中。",
+      "color": "#BFF2BB",
+      "details": [
+        { "label": "經濟", "value": "帝國有著興盛的貿易傳統，各種來自世界的各地的奇珍和技術在這裡交會，這也使得他們在災變之後廣泛吸收來自各地的新知識。" },
+        { "label": "社會", "value": "在帝國的傳統中，金錢是一個人力量和地位的象徵，要買來貴族地位也不是問題，因此階級流動極為頻繁。" },
+        { "label": "帝國有著嚴苛的奴隸制度", "value": "任何人只要欠下龐大的債務又無力償還，就會被打上烙印，淪為奴隸。烙印一旦落下便永無翻身之日：無論身體或靈魂，都將永遠成為主人的所有物。即使死去，遺體也會被製成傀儡，繼續為主人效勞。" },
+        { "label": "統治階層", "value": "帝國由皇族統治，四大貴族輔政。" },
+        { "label": "皇族：翡翠龍人", "value": "皇族是流著龍神「貪婪」血脈的龍人，他們出身時體內就蘊含著強大的魔力，能輕易地施展強大的魔法，帝國的歷任皇帝和親王皆出自此族，但偶爾也會有落魄成奴隸的存在。" },
+        { "label": "四大貴族", "value": "除了皇帝之外，帝國中有著另一群勢力龐大的貴族，分別是墨曜(蛇)、琥珀(牛)、青金(鷹)、月長(鹿)四大家族，他們把持著帝國內的重要職務，隱隱維持著平衡。" },
+        { "label": "家族", "value": "墨曜家        蛇        情報、刑獄、醫術與暗殺 琥珀家        牛        城鎮管理、銀行債務、糧倉與礦產 青金家        鷹        軍隊、空艦與航路的維護 月長家        鹿        知識、教育、祭祀" }
       ]
     }
   ],

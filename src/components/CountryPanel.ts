@@ -3,7 +3,8 @@ import { getTravelOptions, getUpcomingMeeting } from "../systems/MobiusSystem";
 
 export class CountryPanel {
   constructor(
-    private root: HTMLElement,
+    private detailsRoot: HTMLElement,
+    private travelRoot: HTMLElement,
     private onSelect: (id: string) => void,
     private onDepartureChange: (id: string) => void
   ) {}
@@ -14,7 +15,7 @@ export class CountryPanel {
     const continent = continents.find((item) => item.id === selectedId);
 
     if (island) {
-      this.root.innerHTML = `
+      this.detailsRoot.innerHTML = `
         <div class="panel-kicker">漂移空島 · ${island.movement === "anchored" ? "已固定" : "高速漂移"}</div>
         <h2>${island.name}</h2>
         <p class="panel-description">${island.description}</p>
@@ -29,8 +30,8 @@ export class CountryPanel {
         .map((id) => countries.find((item) => item.id === id))
         .filter((item) => item !== undefined);
       const nextMeeting = getUpcomingMeeting(continent.id, day);
-      this.root.innerHTML = `
-        <div class="panel-kicker">破碎大陸 · 環帶漂流</div>
+      this.detailsRoot.innerHTML = `
+        <div class="panel-kicker">大陸 · ${continent.movement === "anchored" ? "固定" : "環帶漂流"}</div>
         <h2>${continent.name}</h2>
         <p class="panel-description">${continent.description}</p>
         <div class="detail-card"><span>所屬國家</span><strong>${nations.length ? nations.map((item) => item.name).join("、") : "待玩家共同設定"}</strong></div>
@@ -40,7 +41,7 @@ export class CountryPanel {
         ${nations.length ? `<div class="country-list">${nations.map((item) => `<button class="country-chip" data-country="${item.id}"><i style="--country-color:${item.color}"></i>${item.name}<span>›</span></button>`).join("")}</div>` : `<div class="dungeon-note"><span>共創空白</span><p>國家、政體、科技與魔法設定尚未定案，留待玩家填寫。</p></div>`}`;
     } else if (country) {
       const home = continents.find((item) => item.id === country.continentId);
-      this.root.innerHTML = `
+      this.detailsRoot.innerHTML = `
         <div class="panel-kicker">國家檔案 · ${home?.name ?? "未知大陸"}</div>
         <h2>${country.name}</h2>
         <p class="country-motto">「${country.motto}」</p>
@@ -50,22 +51,21 @@ export class CountryPanel {
         <div class="country-details">${country.details.map((detail) => `<div class="detail-card"><span>${detail.label}</span><strong>${detail.value}</strong></div>`).join("")}</div>
         `;
     } else {
-      this.root.innerHTML = `<div class="empty-panel"><span class="empty-icon">✦</span><h2>迷失於航圖</h2><p>選擇一座大陸、國家或空島，查看它的故事。</p></div>`;
+      this.detailsRoot.innerHTML = `<div class="empty-panel"><span class="empty-icon">✦</span><h2>迷失於航圖</h2><p>選擇一座大陸、國家或空島，查看它的故事。</p></div>`;
     }
 
     const locations = [...continents, ...islands];
-    this.root.insertAdjacentHTML("beforeend", `
-      <div class="panel-divider"></div>
+    this.travelRoot.innerHTML = `
       <div class="section-heading"><span>航路推演</span><span>${settings.timeline.yearLabel} · ${settings.timeline.dayLabel} ${String(day).padStart(2, "0")}</span></div>
       <label class="select-label" for="departure">出發地</label>
       <select id="departure" class="destination-select">${locations.map((item) => `<option value="${item.id}" ${item.id === departureId ? "selected" : ""}>${item.name}</option>`).join("")}</select>
       <label class="select-label" for="destination">目的地</label>
       <select id="destination" class="destination-select"></select>
-      <div class="travel-options" id="travel-options"></div>`);
+      <div class="travel-options" id="travel-options"></div>`;
 
-    const departureSelect = this.root.querySelector<HTMLSelectElement>("#departure");
-    const destinationSelect = this.root.querySelector<HTMLSelectElement>("#destination");
-    const travelHost = this.root.querySelector<HTMLElement>("#travel-options");
+    const departureSelect = this.travelRoot.querySelector<HTMLSelectElement>("#departure");
+    const destinationSelect = this.travelRoot.querySelector<HTMLSelectElement>("#destination");
+    const travelHost = this.travelRoot.querySelector<HTMLElement>("#travel-options");
     const renderDestinations = (preferredId?: string) => {
       if (!departureSelect || !destinationSelect) return;
       const destinations = locations.filter((item) => item.id !== departureSelect.value);
@@ -92,7 +92,7 @@ export class CountryPanel {
     });
     destinationSelect?.addEventListener("change", renderOptions);
 
-    this.root.querySelectorAll<HTMLButtonElement>("[data-country]").forEach((button) => {
+    this.detailsRoot.querySelectorAll<HTMLButtonElement>("[data-country]").forEach((button) => {
       button.addEventListener("click", () => this.onSelect(button.dataset.country ?? ""));
     });
   }

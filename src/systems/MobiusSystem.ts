@@ -22,15 +22,37 @@ function getOrbitPosition(angleDegrees: number): { x: number; y: number } {
 }
 
 function getOrbitAngle(continent: Continent, day: number): number {
+  if (continent.movement === "anchored") return continent.orbitAngle;
   return continent.orbitAngle
     + settings.orbit.direction * (day / settings.cycleDays) * 360;
 }
 
+function getCycleDay(day: number): number {
+  return ((day % settings.cycleDays) + settings.cycleDays) % settings.cycleDays;
+}
+
+function findMeetingPartner(continent: Continent, meeting: Continent["meetings"][number], meetingDay: number): Continent | undefined {
+  if (meeting.targetContinentId) {
+    const target = continents.find((item) => item.id === meeting.targetContinentId);
+    return target?.movement === "anchored" && meeting.mode === "edge" ? target : undefined;
+  }
+  return continents.find((item) =>
+    item.id !== continent.id
+    && item.movement === "drifting"
+    && item.meetings.some((other) =>
+      !other.targetContinentId
+      && getCycleDay(other.day) === meetingDay
+      && other.mode === meeting.mode
+    )
+  );
+}
+
 export function getContinentPosition(continent: Continent, day: number): { x: number; y: number } {
+  if (continent.movement === "anchored") return getOrbitPosition(continent.orbitAngle);
   const index = continents.findIndex((item) => item.id === continent.id);
   const currentAngle = getOrbitAngle(continent, day);
   const position = getOrbitPosition(currentAngle);
-  const cycleDay = ((day % settings.cycleDays) + settings.cycleDays) % settings.cycleDays;
+  const cycleDay = getCycleDay(day);
   const approachDays = Math.max(0, settings.continentDrift.meetingApproachDays);
   if (approachDays === 0) return position;
 
@@ -39,29 +61,35 @@ export function getContinentPosition(continent: Continent, day: number): { x: nu
   let radialOffset = 0;
 
   for (const meeting of continent.meetings) {
-    const meetingDay = ((meeting.day % settings.cycleDays) + settings.cycleDays) % settings.cycleDays;
+    const meetingDay = getCycleDay(meeting.day);
     const distance = ((cycleDay - meetingDay + settings.cycleDays / 2) % settings.cycleDays
       + settings.cycleDays) % settings.cycleDays - settings.cycleDays / 2;
     const progress = Math.max(0, 1 - Math.abs(distance) / approachDays);
     const influence = progress * progress * (3 - 2 * progress);
     if (influence <= strongestInfluence) continue;
 
-    const partner = continents.find((item) =>
-      item.id !== continent.id
-      && item.meetings.some((other) =>
-        ((other.day % settings.cycleDays) + settings.cycleDays) % settings.cycleDays === meetingDay
-        && other.mode === meeting.mode
-      )
-    );
+    const partner = findMeetingPartner(continent, meeting, meetingDay);
     if (!partner) continue;
 
     const currentAngle = getOrbitAngle(continent, meetingDay);
     const partnerAngle = getOrbitAngle(partner, meetingDay);
+    const side = index < continents.indexOf(partner) ? -1 : 1;
+    strongestInfluence = influence;
+    if (partner.movement === "anchored") {
+      const meetingAngle = (partnerAngle * Math.PI) / 180;
+      const tangentX = -settings.orbit.radiusX * Math.sin(meetingAngle);
+      const tangentY = settings.orbit.radiusY * Math.cos(meetingAngle);
+      const tangentLength = Math.hypot(tangentX, tangentY);
+      const gap = ((continent.width + partner.width) / 2)
+        * settings.continentDrift.edgeMeetingGapRatio / tangentLength * (180 / Math.PI);
+      rendezvousAngle = partnerAngle + gap * side;
+      radialOffset = 0;
+      continue;
+    }
+
     const angleDifference = ((partnerAngle - currentAngle + 540) % 360) - 180;
     const sharedAngle = currentAngle + angleDifference / 2;
     const meetingAngle = (sharedAngle * Math.PI) / 180;
-    const side = index < continents.indexOf(partner) ? -1 : 1;
-    strongestInfluence = influence;
     if (meeting.mode === "inner") {
       rendezvousAngle = sharedAngle;
       radialOffset = ((continent.height + partner.height) / 2)
@@ -95,22 +123,19 @@ export function getContinentPosition(continent: Continent, day: number): { x: nu
 
 export function getUpcomingMeeting(continentId: string, currentDay: number): UpcomingMeeting | undefined {
   const continent = continents.find((item) => item.id === continentId);
-  if (!continent || continent.meetings.length === 0) return undefined;
-  const remainder = ((currentDay % settings.cycleDays) + settings.cycleDays) % settings.cycleDays;
-  const upcomingMeetings = continent.meetings.flatMap((meeting) => {
-    const meetingDay = ((meeting.day % settings.cycleDays) + settings.cycleDays) % settings.cycleDays;
-    const partnerExists = continents.some((other) =>
-      other.id !== continent.id
-      && other.meetings.some((otherMeeting) =>
-        ((otherMeeting.day % settings.cycleDays) + settings.cycleDays) % settings.cycleDays === meetingDay
-        && otherMeeting.mode === meeting.mode
-      )
-    );
-    if (!partnerExists) return [];
-    return [{
-      meeting,
-      daysUntil: (meetingDay - remainder + settings.cycleDays) % settings.cycleDays
-    }];
+  if (!continent) return undefined;
+  const scheduledMeetings = continent.movement === "anchored"
+    ? continents
+      .filter((item) => item.movement === "drifting")
+      .flatMap((item) => item.meetings
+        .filter((meeting) => meeting.targetContinentId === continent.id)
+        .map((meeting) => ({ meeting, owner: item })))
+    : continent.meetings.map((meeting) => ({ meeting, owner: continent }));
+  const remainder = getCycleDay(currentDay);
+  const upcomingMeetings = scheduledMeetings.flatMap(({ meeting, owner }) => {
+    const meetingDay = getCycleDay(meeting.day);
+    if (!findMeetingPartner(owner, meeting, meetingDay)) return [];
+    return [{ meeting, daysUntil: (meetingDay - remainder + settings.cycleDays) % settings.cycleDays }];
   });
   return upcomingMeetings.sort((left, right) => left.daysUntil - right.daysUntil)[0];
 }
@@ -156,6 +181,26 @@ function getSurfaceGap(
   return Math.max(0, centerDistance - fromRadius - toRadius);
 }
 
+function getMeetingBetween(
+  first: Continent,
+  second: Continent,
+  cycleDay: number
+): Continent["meetings"][number] | undefined {
+  const findScheduledMeeting = (continent: Continent, partner: Continent) => {
+    if (continent.movement !== "drifting") return undefined;
+    return continent.meetings.find((meeting) => {
+      if (getCycleDay(meeting.day) !== cycleDay) return false;
+      if (meeting.targetContinentId) return meeting.targetContinentId === partner.id;
+      return partner.movement === "drifting" && partner.meetings.some((other) =>
+        !other.targetContinentId
+        && getCycleDay(other.day) === cycleDay
+        && other.mode === meeting.mode
+      );
+    });
+  };
+  return findScheduledMeeting(first, second) ?? findScheduledMeeting(second, first);
+}
+
 export function getTravelOptions(fromId: string, toId: string, day: number): TravelOption[] {
   const fromContinent = continents.find((item) => item.id === fromId);
   const toContinent = continents.find((item) => item.id === toId);
@@ -176,16 +221,11 @@ export function getTravelOptions(fromId: string, toId: string, day: number): Tra
     ? toContinent
     : { width: toIsland!.size, height: toIsland!.size, circular: true };
   const distance = getSurfaceGap(fromEndpoint, fromPosition, toEndpoint, toPosition);
-  const cycleDay = ((day % settings.cycleDays) + settings.cycleDays) % settings.cycleDays;
-  const findMeeting = (continent: Continent | undefined) => continent?.meetings.find((meeting) =>
-    ((meeting.day % settings.cycleDays) + settings.cycleDays) % settings.cycleDays === cycleDay
-  );
-  const fromMeeting = findMeeting(fromContinent);
-  const toMeeting = findMeeting(toContinent);
-  const innerMeeting = Boolean(fromContinent && toContinent
-    && fromMeeting?.mode === "inner" && toMeeting?.mode === "inner");
-  const edgeContact = Boolean(fromContinent && toContinent
-    && fromMeeting?.mode === "edge" && toMeeting?.mode === "edge");
+  const meeting = fromContinent && toContinent
+    ? getMeetingBetween(fromContinent, toContinent, getCycleDay(day))
+    : undefined;
+  const innerMeeting = meeting?.mode === "inner";
+  const edgeContact = meeting?.mode === "edge";
 
   return [
     {
