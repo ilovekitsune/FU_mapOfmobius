@@ -8,11 +8,12 @@ export interface Continent {
   id: string;
   name: string;
   subtitle: string;
-  shape: "irregular" | "circle" | "square" | "rectangle";
+  shape: "irregular" | "circle" | "square" | "rectangle" | "spaceship";
   width: number;
   height: number;
   rotation: number;
   orbitAngle: number;
+  orbitPeriodDays?: number;
   movement: "drifting" | "anchored";
   countryIds: string[];
   description: string;
@@ -111,6 +112,7 @@ export interface WorldSettings {
   };
   timeline: TimelineSettings;
   continentDrift: {
+    orbitPeriodDays: number;
     meetingApproachDays: number;
     innerMeetingGapRatio: number;
     edgeMeetingGapRatio: number;

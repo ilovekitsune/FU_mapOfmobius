@@ -53,7 +53,7 @@ npm run build
 | --- | --- |
 | `initialDay` | 頁面載入時的初始旅行日，需在時間線範圍內。 |
 | `initialSelectedId` | 初始選取地點的 ID，可使用國家、大陸或空島 ID。 |
-| `cycleDays` | 大陸沿橢圓軌道環行一圈所需日數。 |
+| `cycleDays` | 世界時序循環日數；大陸交會排程以此為循環。 |
 | `orbit.centerX`, `centerY` | 軌道中心在地圖 SVG 上的位置。 |
 | `orbit.radiusX`, `radiusY` | 軌道橢圓的水平與垂直半徑。 |
 | `orbit.direction` | 運行方向：`1` 或 `-1`。 |
@@ -63,6 +63,7 @@ npm run build
 | `timeline.yearLabel`, `heading`, `dayLabel` | 年份標籤、時間線標題及日數單位文案。 |
 | 其他 `timeline` 欄位 | 重設／前後日按鈕、無事件狀態、事件種類名稱／圖示與無障礙標籤文字。 |
 | `continentDrift.meetingApproachDays` | 大陸交會前開始靠近的天數。設為 `0` 可關閉靠近效果。 |
+| `continentDrift.orbitPeriodDays` | 漂流大陸沿橢圓軌道環行一圈所需日數；數字越小移動越快。目前為 365 日。 |
 | `continentDrift.innerMeetingGapRatio` | 環內上下交會時的分隔距離比例。 |
 | `continentDrift.edgeMeetingGapRatio` | 大陸接觸時的邊緣間距比例；`0.5` 約為邊緣相接。 |
 | `islandDrift.daysPerCycle` | 漂移空島沿橢圓環帶跑完一圈的天數；數字越小移動越快。目前為 4 日。 |
@@ -80,10 +81,11 @@ npm run build
 每座大陸需有唯一 `id`，並設定：
 
 - `name`、`subtitle`、`description`：地圖與地點面板顯示內容。
-- `shape`：外形，使用以下英文值之一：`irregular`、`circle`、`square`、`rectangle`。值區分大小寫；不要使用中文翻譯。
+- `shape`：外形，使用以下英文值之一：`irregular`、`circle`、`square`、`rectangle`、`spaceship`。`spaceship` 會繪製左向艦首、艦橋與分層艦尾的太空戰艦輪廓。值區分大小寫；不要使用中文翻譯。
 - `width`、`height`：外形尺寸，單位為 SVG 畫布座標。圓形與正方形以較小值作為直徑或邊長。
 - `rotation`：目前保留的資料欄位；大陸平面圖形目前不會依此角度旋轉。
 - `orbitAngle`：旅行日 0 時在軌道上的初始角度，單位為度。
+- `orbitPeriodDays`：選填；此大陸沿軌道環行一圈所需日數，數字越小移動越快。省略時使用 `settings.continentDrift.orbitPeriodDays`。
 - `movement`：移動方式，使用 `drifting`（隨莫比烏斯環帶移動）或 `anchored`（固定在 `orbitAngle` 對應的位置）；固定大陸不會自行移動，但可被移動大陸指定為交會目標。
 - `countryIds`：此大陸所屬國家的 ID；需與 `countries[].continentId` 相互對應。
 - `meetings`：交會日清單，每筆包含 `day` 和 `mode`。`mode` 為 `inner`（環內上下交會）或 `edge`（大陸接觸）。一般移動大陸的交會需在另一座移動大陸設定相同週期日與模式；也可在移動大陸的交會項目加入 `targetContinentId` 指定固定大陸，固定大陸不需設定交會。指定固定大陸時使用 `edge`，移動大陸會在交會日前靠近並於交會日接觸。

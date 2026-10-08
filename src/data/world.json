@@ -42,6 +42,7 @@
       }
     },
     "continentDrift": {
+      "orbitPeriodDays": 50,
       "meetingApproachDays": 4,
       "innerMeetingGapRatio": 0.5,
       "edgeMeetingGapRatio": 0.5
@@ -68,18 +69,20 @@
       "name": "艾倫布萊德",
       "subtitle": "鋼鐵巨塔，帶著傷口啟程",
       "shape": "circle",
-      "width":80,
+      "width": 80,
       "height": 80,
       "rotation": -12,
       "orbitAngle": 210,
       "movement": "drifting",
+      "orbitPeriodDays": 30,
       "countryIds": ["iron-blood_high", "iron-blood_middle", "iron-blood_low"],
       "description": "以蒸汽與齒輪打造的機動人造大陸。這座三十三層的巨塔能沿莫比烏斯環有限的自主移動；",
       "meetings": [
         { "day": 8, "mode": "inner" },
         { "day": 19, "mode": "edge" }
       ]
-    },{
+    },
+    {
       "id": "silver-jade-continent",
       "name": "輝玉帝國",
       "subtitle": "被龍神「貪婪」祝福的國度",
@@ -93,7 +96,7 @@
       "description": "輝玉帝國是一個混和中式和日式風格的國度，當世界破碎的那一刻，被這個國家所供奉的龍神「貪婪」保護，因此留存了大片的土地。藉由著保存完好的的陸地和經濟實力，帝國迅速地擴展著他的影響力，成為一個強悍繁榮的地區。而在那之後，龍神沉睡於皇宮的地下神殿之中。",
       "meetings": []
     },
-    
+
     {
       "id": "north-fragment",
       "name": "未知大陸",
@@ -102,27 +105,32 @@
       "width": 100,
       "height": 100,
       "rotation": 9,
-      "orbitAngle": 315,
+      "orbitAngle": 68,
       "movement": "drifting",
       "countryIds": [],
       "description": "漂流在莫比烏斯環北段的破碎大陸，將於第八旅行日與艾倫布萊德在環內上下交會。",
       "meetings": [
         { "day": 8, "mode": "inner" },
-        { "day": 30, "mode": "edge", "targetContinentId": "silver-jade-continent" }
+        {
+          "day": 30,
+          "mode": "edge",
+          "targetContinentId": "silver-jade-continent"
+        }
       ]
     },
     {
-      "id": "south-fragment",
-      "name": "未知大陸",
-      "subtitle": "尚未命名的遠方",
-      "shape": "square",
-      "width": 100,
-      "height": 100,
+      "id": "sakarado-continent",
+      "name": "沙葛拉多",
+      "subtitle": "圓形大陸，上方似乎有著許多的王國與城市",
+      "shape": "circle",
+      "width": 120,
+      "height": 80,
       "rotation": 4,
-      "orbitAngle": 65,
+      "orbitAngle": 300,
       "movement": "drifting",
-      "countryIds": [],
-      "description": "位於莫比烏斯環南段的碎陸，旅行者們還未知曉其存在。步行通路只會在大陸實際相接時出現；",
+      "orbitPeriodDays": 305,
+      "countryIds": [ "semikaiyara_country" ],
+      "description": "無名的圓形大陸，上方似乎有著許多的王國與城市，其中人族與精靈族交織的聖米凱亞拉國最有名。",
       "meetings": [{ "day": 19, "mode": "edge" }]
     },
     {
@@ -138,6 +146,20 @@
       "countryIds": [],
       "description": "位於莫比烏斯環南段的漂流大陸，旅行者們還未知曉其存在。步行通路只會在大陸實際相接時出現；",
       "meetings": [{ "day": 300, "mode": "edge" }]
+    },
+    {
+      "id": "hollow-nest-continent",
+      "name": "聖巢空島",
+      "subtitle": "古代神戰戰場遺址，空島的孤寂",
+      "shape": "circle",
+      "width": 30,
+      "height": 30,
+      "rotation": 7,
+      "orbitAngle": 23,
+      "movement": "drifting",
+      "countryIds": ["hollow-nest-country"],
+      "description": "神秘且浸泡在虛空海中，不浮空的方形小島；",
+      "meetings": []
     }
   ],
   "countries": [
@@ -151,12 +173,15 @@
       "description": "艾倫布萊德的上層貴族居所，掌握超過 99% 的資源，並以此維持奢糜的生活。",
       "color": "#FF6B8B",
       "details": [
-        { "label": "塔頂 1–11 層", "value": "上層貴族居所；約占人口 5%，掌握超過 99% 的資源" },
+        {
+          "label": "塔頂 1–11 層",
+          "value": "上層貴族居所；約占人口 5%，掌握超過 99% 的資源"
+        },
         { "label": "未解鎖", "value": "???" },
         { "label": "未解鎖", "value": "???" }
-
       ]
-    },{
+    },
+    {
       "id": "iron-blood_middle",
       "name": "中段 12–22 層",
       "continentId": "iron-blood-continent",
@@ -166,15 +191,28 @@
       "description": "艾倫布萊德的中層商業與科研區，掌握少量資源。 主要的營運與管理單位位於此，並掌握塔內的門禁系統。",
       "color": "#99E6FF",
       "details": [
-        { "label": "政體與入港", "value": "執政官核驗外來者身分，並依身分分配居所；塔內各區設有門禁" },
-        { "label": "科技與魔法", "value": "高科技、低魔法；魔法僅作為機械動力電池" },
+        {
+          "label": "政體與入港",
+          "value": "執政官核驗外來者身分，並依身分分配居所；塔內各區設有門禁"
+        },
+        {
+          "label": "科技與魔法",
+          "value": "高科技、低魔法；魔法僅作為機械動力電池"
+        },
         { "label": "中段 12–22 層", "value": "中層商業與科研區；約占人口 15%" },
-        { "label": "糧食與航運", "value": "農業空間稀少，糧食優先供給貴族；擁有最完整的飛行載具" },
-        { "label": "魔法探勘集團", "value": "由中高階貴族設立，招募各地冒險者探索地下城、尋找魔力核心；小隊配有飛空艇" },
+        {
+          "label": "糧食與航運",
+          "value": "農業空間稀少，糧食優先供給貴族；擁有最完整的飛行載具"
+        },
+        {
+          "label": "魔法探勘集團",
+          "value": "由中高階貴族設立，招募各地冒險者探索地下城、尋找魔力核心；小隊配有飛空艇"
+        },
         { "label": "未解鎖", "value": "???" },
         { "label": "未解鎖", "value": "???" }
       ]
-    },{
+    },
+    {
       "id": "iron-blood_low",
       "name": "塔底 23–33 層",
       "continentId": "iron-blood-continent",
@@ -184,11 +222,15 @@
       "description": "艾倫布萊德的下層工業與勞動區，掌握忽略不計的資源。這裡是社會的底層，生活條件艱苦。",
       "color": "#BFF2BB",
       "details": [
-        { "label": "塔底 23–33 層", "value": "下層工業與勞動區；約占人口 80%，廢水、污濁空氣與治安問題交織" },
+        {
+          "label": "塔底 23–33 層",
+          "value": "下層工業與勞動區；約占人口 80%，廢水、污濁空氣與治安問題交織"
+        },
         { "label": "未解鎖", "value": "???" },
         { "label": "未解鎖", "value": "???" }
       ]
-    },{
+    },
+    {
       "id": "silver-jade_empire",
       "name": "輝玉帝國",
       "continentId": "silver-jade-continent",
@@ -198,13 +240,72 @@
       "description": "輝玉帝國是一個混和中式和日式風格的國度，當世界破碎的那一刻，被這個國家所供奉的龍神「貪婪」保護，因此留存了大片的土地。藉由著保存完好的的陸地和經濟實力，帝國迅速地擴展著他的影響力，成為一個強悍繁榮的地區。而在那之後，龍神沉睡於皇宮的地下神殿之中。",
       "color": "#BFF2BB",
       "details": [
-        { "label": "經濟", "value": "帝國有著興盛的貿易傳統，各種來自世界的各地的奇珍和技術在這裡交會，這也使得他們在災變之後廣泛吸收來自各地的新知識。" },
-        { "label": "社會", "value": "在帝國的傳統中，金錢是一個人力量和地位的象徵，要買來貴族地位也不是問題，因此階級流動極為頻繁。" },
-        { "label": "帝國有著嚴苛的奴隸制度", "value": "任何人只要欠下龐大的債務又無力償還，就會被打上烙印，淪為奴隸。烙印一旦落下便永無翻身之日：無論身體或靈魂，都將永遠成為主人的所有物。即使死去，遺體也會被製成傀儡，繼續為主人效勞。" },
+        {
+          "label": "經濟",
+          "value": "帝國有著興盛的貿易傳統，各種來自世界的各地的奇珍和技術在這裡交會，這也使得他們在災變之後廣泛吸收來自各地的新知識。"
+        },
+        {
+          "label": "社會",
+          "value": "在帝國的傳統中，金錢是一個人力量和地位的象徵，要買來貴族地位也不是問題，因此階級流動極為頻繁。"
+        },
+        {
+          "label": "帝國有著嚴苛的奴隸制度",
+          "value": "任何人只要欠下龐大的債務又無力償還，就會被打上烙印，淪為奴隸。烙印一旦落下便永無翻身之日：無論身體或靈魂，都將永遠成為主人的所有物。即使死去，遺體也會被製成傀儡，繼續為主人效勞。"
+        },
         { "label": "統治階層", "value": "帝國由皇族統治，四大貴族輔政。" },
-        { "label": "皇族：翡翠龍人", "value": "皇族是流著龍神「貪婪」血脈的龍人，他們出身時體內就蘊含著強大的魔力，能輕易地施展強大的魔法，帝國的歷任皇帝和親王皆出自此族，但偶爾也會有落魄成奴隸的存在。" },
-        { "label": "四大貴族", "value": "除了皇帝之外，帝國中有著另一群勢力龐大的貴族，分別是墨曜(蛇)、琥珀(牛)、青金(鷹)、月長(鹿)四大家族，他們把持著帝國內的重要職務，隱隱維持著平衡。" },
-        { "label": "家族", "value": "墨曜家        蛇        情報、刑獄、醫術與暗殺 琥珀家        牛        城鎮管理、銀行債務、糧倉與礦產 青金家        鷹        軍隊、空艦與航路的維護 月長家        鹿        知識、教育、祭祀" }
+        {
+          "label": "皇族：翡翠龍人",
+          "value": "皇族是流著龍神「貪婪」血脈的龍人，他們出身時體內就蘊含著強大的魔力，能輕易地施展強大的魔法，帝國的歷任皇帝和親王皆出自此族，但偶爾也會有落魄成奴隸的存在。"
+        },
+        {
+          "label": "四大貴族",
+          "value": "除了皇帝之外，帝國中有著另一群勢力龐大的貴族，分別是墨曜(蛇)、琥珀(牛)、青金(鷹)、月長(鹿)四大家族，他們把持著帝國內的重要職務，隱隱維持著平衡。"
+        },
+        {
+          "label": "家族",
+          "value": "墨曜家        蛇        情報、刑獄、醫術與暗殺 琥珀家        牛        城鎮管理、銀行債務、糧倉與礦產 青金家        鷹        軍隊、空艦與航路的維護 月長家        鹿        知識、教育、祭祀"
+        }
+      ]
+    },
+    {
+      "id": "semikaiyara_country",
+      "name": "聖米凱亞拉國",
+      "continentId": "sakarado-continent",
+      "motto": "探索未知，書寫傳說。",
+      "status": "繁榮",
+      "capital": "????",
+      "description": "聖米凱亞拉國位於一個圓形的大陸上，它雖然是那片大陸上主要的國家，但並不是唯一的國家。",
+      "color": "#99E6FF",
+      "details": [{ "label": "主要種族", "value": "主要種族是人族與精靈族" },
+        { "label": "未知", "value": "其他細節仍然未知。" }]
+    },
+    {
+      "id": "hollow-nest-country",
+      "name": "聖巢王國",
+      "continentId": "hollow-nest-continent",
+      "motto": "蟲鳴與風聲，聖巢的孤寂。",
+      "status": "未知",
+      "capital": "????",
+      "description": "由於環境因素，王國基本上不會在地表上，所以是不是統領這片大陸並不得而知。",
+      "color": "#99E6FF",
+      "details": [
+        {
+          "label": "古代神戰戰場遺址",
+          "value": "這裡是古代神戰戰場遺址，殘留的魔力讓風中充滿詛咒，幾乎沒有生物可以在地表生存，即使是強大到可以在地表移動的生物，其巢穴也隱藏在地底下。"
+        },
+        {
+          "label": "詛咒防護網",
+          "value": "即使環境如此苛刻，只要擁有力量強大到可以製造出抵禦詛咒防護網的存在，仍然有可能在其庇護下誕生出文明。"
+        },
+        {
+          "label": "蒼白巨龍",
+          "value": "聖巢王國便落座在這座大陸中心偏南、深邃的地下洞穴內。統治聖巢的存在是一種被稱為“蒼白巨龍”的存在，祂數千年前在大陸上漫遊時，路經此地發現這邊有許多（相較之下）足以抵抗詛咒的強大存在聚集於此，便停留下來、和大多數強大存在建立邦交、成立了聖巢王國。"
+        },
+        {
+          "label": "頂尖魔法技術",
+          "value": "聖巢王國的頂尖魔法技術高度壟斷在王宮內，從使役元素精靈、製作永久自動化封印或守護符文到改造居住環境等都能辦到；"
+        },
+        { "label": "未知", "value": "其他細節仍然未知。" }
       ]
     }
   ],
@@ -221,8 +322,8 @@
       "phase": 0.4
     },
     {
-      "id": "bell",
-      "name": "未知空島",
+      "id": "raven2",
+      "name": "空島",
       "x": 891,
       "y": 489,
       "size": 20,
@@ -260,14 +361,14 @@
       "description": "MS 399 年，命運引領著旅人抵達於此。",
       "locationId": "iron-blood",
       "type": "story"
-    },{
+    },
+    {
       "day": 365,
       "title": "一年的結束",
       "description": "旅人相遇一周年。",
       "locationId": "iron-blood",
       "type": "story"
     }
-
   ],
   "history": [
     {

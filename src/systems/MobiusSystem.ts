@@ -23,8 +23,9 @@ function getOrbitPosition(angleDegrees: number): { x: number; y: number } {
 
 function getOrbitAngle(continent: Continent, day: number): number {
   if (continent.movement === "anchored") return continent.orbitAngle;
+  const orbitPeriodDays = continent.orbitPeriodDays ?? settings.continentDrift.orbitPeriodDays;
   return continent.orbitAngle
-    + settings.orbit.direction * (day / settings.cycleDays) * 360;
+    + settings.orbit.direction * (day / orbitPeriodDays) * 360;
 }
 
 function getCycleDay(day: number): number {

@@ -8,7 +8,7 @@ const landShape = (
   y: number,
   width: number,
   height: number,
-  shape: "irregular" | "circle" | "square" | "rectangle"
+  shape: "irregular" | "circle" | "square" | "rectangle" | "spaceship"
 ) => {
   if (shape === "circle") {
     const radius = Math.min(width, height) / 2;
@@ -20,6 +20,26 @@ const landShape = (
   }
   if (shape === "rectangle") {
     return `M ${x - width / 2} ${y - height / 2} H ${x + width / 2} V ${y + height / 2} H ${x - width / 2} Z`;
+  }
+  if (shape === "spaceship") {
+    const point = (horizontal: number, vertical: number) =>
+      `${x + width * (horizontal / 100 - 0.5)} ${y + height * (vertical / 100 - 0.5)}`;
+    return `M ${point(0, 55)}
+      Q ${point(8, 51)} ${point(17, 49)}
+      L ${point(66, 43)}
+      L ${point(72, 39)} ${point(76, 40)}
+      L ${point(78, 30)} ${point(83, 27)}
+      L ${point(87, 30)} ${point(87, 39)}
+      L ${point(92, 40)} ${point(96, 37)}
+      L ${point(100, 43)} ${point(96, 48)}
+      L ${point(100, 53)} ${point(96, 58)}
+      L ${point(100, 64)} ${point(95, 68)}
+      L ${point(90, 64)} ${point(86, 65)}
+      L ${point(82, 76)} ${point(77, 73)}
+      L ${point(74, 61)} ${point(67, 60)}
+      L ${point(18, 62)}
+      Q ${point(7, 61)} ${point(0, 55)}
+      Z`;
   }
   return `M ${x - width * 0.46} ${y - height * 0.1}
    L ${x - width * 0.34} ${y - height * 0.38}
@@ -46,11 +66,22 @@ export class WorldMap {
       const meeting = upcomingMeeting?.daysUntil === 0;
       const fill = ["land-rose", "land-plum", "land-ash"][index % 3];
       const shape = landShape(position.x, position.y, continent.width, continent.height, continent.shape);
+      const shapeDetails = continent.shape === "spaceship"
+        ? `<path class="land-detail" d="
+          M ${position.x - continent.width * 0.36} ${position.y + continent.height * 0.07} L ${position.x + continent.width * 0.48} ${position.y - continent.height * 0.06}
+          M ${position.x + continent.width * 0.22} ${position.y - continent.height * 0.08} L ${position.x + continent.width * 0.24} ${position.y - continent.height * 0.23} L ${position.x + continent.width * 0.31} ${position.y - continent.height * 0.27} L ${position.x + continent.width * 0.36} ${position.y - continent.height * 0.23} L ${position.x + continent.width * 0.36} ${position.y - continent.height * 0.05}
+          M ${position.x + continent.width * 0.28} ${position.y - continent.height * 0.28} L ${position.x + continent.width * 0.28} ${position.y - continent.height * 0.4}
+          M ${position.x + continent.width * 0.48} ${position.y + continent.height * 0.12} L ${position.x + continent.width * 0.53} ${position.y + continent.height * 0.28} L ${position.x + continent.width * 0.58} ${position.y + continent.height * 0.12}
+          M ${position.x + continent.width * 0.67} ${position.y - continent.height * 0.05} L ${position.x + continent.width * 0.77} ${position.y - continent.height * 0.14} L ${position.x + continent.width * 0.84} ${position.y - continent.height * 0.03}
+          M ${position.x + continent.width * 0.67} ${position.y + continent.height * 0.1} L ${position.x + continent.width * 0.77} ${position.y + continent.height * 0.19} L ${position.x + continent.width * 0.84} ${position.y + continent.height * 0.08}" />`
+        : continent.shape === "irregular"
+          ? `<path class="land-detail" d="M ${position.x - 38} ${position.y - 12} Q ${position.x - 3} ${position.y - 48} ${position.x + 19} ${position.y - 11} T ${position.x + 56} ${position.y + 16}" />`
+          : "";
       return `
         <g class="landmass ${isSelected ? "is-selected" : ""}" data-id="${continent.id}" tabindex="0" role="button" aria-label="選擇${continent.name}">
           <path class="land-shadow" transform="translate(0 9)" d="${shape}" />
           <path class="land ${fill}" d="${shape}" />
-          ${continent.shape === "irregular" ? `<path class="land-detail" d="M ${position.x - 38} ${position.y - 12} Q ${position.x - 3} ${position.y - 48} ${position.x + 19} ${position.y - 11} T ${position.x + 56} ${position.y + 16}" />` : ""}
+          ${shapeDetails}
           <circle class="land-beacon ${meeting ? "beacon-active" : ""}" cx="${position.x + continent.width * 0.28}" cy="${position.y - continent.height * 0.19}" r="4" />
           <text class="map-label" x="${position.x}" y="${position.y + 5}">${continent.name}</text>
           <text class="map-sub-label" x="${position.x}" y="${position.y + 25}">${meeting ? (upcomingMeeting.meeting.mode === "inner" ? "環內交會" : "大陸接觸") : continent.subtitle}</text>
@@ -69,13 +100,16 @@ export class WorldMap {
         </g>`;
     }).join("");
 
-    const countryNodes = countries.map((country, index) => {
-      const continent = continents.find((item) => item.id === country.continentId);
-      if (!continent) return "";
+    const countryNodes = continents.flatMap((continent) => {
+      const continentCountries = countries.filter((country) => country.continentId === continent.id);
       const position = getContinentPosition(continent, state.day);
-      const offsets = [{ x: -48, y: -2 }, { x: 49, y: 15 }, { x: 12, y: -22 }, { x: -7, y: 15 }];
-      const offset = offsets[index % offsets.length];
-      return `<circle class="country-dot ${country.id === state.selectedId ? "is-selected" : ""}" data-id="${country.id}" cx="${position.x + offset.x}" cy="${position.y + offset.y}" r="5" style="--country-color:${country.color}" tabindex="0" role="button" aria-label="選擇${country.name}" />`;
+      const markerRadius = Math.min(continent.width, continent.height) * 0.22;
+      return continentCountries.map((country, index) => {
+        const angle = -Math.PI / 2 + (index * 2 * Math.PI) / continentCountries.length;
+        const x = position.x + Math.cos(angle) * markerRadius;
+        const y = position.y + Math.sin(angle) * markerRadius;
+        return `<circle class="country-dot ${country.id === state.selectedId ? "is-selected" : ""}" data-id="${country.id}" cx="${x}" cy="${y}" r="5" style="--country-color:${country.color}" tabindex="0" role="button" aria-label="選擇${country.name}" />`;
+      });
     }).join("");
 
     this.root.innerHTML = `
@@ -116,7 +150,7 @@ export class WorldMap {
             : `M ${settings.orbit.centerX + settings.orbit.radiusX * 0.83} ${settings.orbit.centerY - settings.orbit.radiusY * 0.56} A ${settings.orbit.radiusX} ${settings.orbit.radiusY} 0 0 0 ${settings.orbit.centerX + settings.orbit.radiusX * 0.56} ${settings.orbit.centerY - settings.orbit.radiusY * 0.83}`}" />
           <path class="band-twist-seam" d="M 600 114 L 600 166" />
           <text class="band-label" x="600" y="89">莫比烏斯之環</text>
-          <text class="band-label-en" x="600" y="104">一週 ${settings.cycleDays} 日 · 順箭頭方向環行</text>
+          <text class="band-label-en" x="600" y="104">大陸依各自週期環行 · 順箭頭方向</text>
         </g>
         <path class="void-current" d="M 438 262 Q 585 320 668 394 T 792 536" />
         <text class="void-label" x="602" y="426">虛 空 海</text>
