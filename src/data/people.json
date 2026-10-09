@@ -1,0 +1,68 @@
+{
+  "players": [
+    {
+      "id": "black_Arrow",
+      "name": "墨鏑",
+      "avatar": "/assets/characters/Black_Arrow.png",
+      "role": "有錢到可疑的走私商",
+      "fate": "野心",
+      "status": "存活",
+      "affiliation": "未知",
+      "relationship": "未知",
+      "latestMove": "前往艾倫布拉德",
+      "originPlace": "輝玉帝國 墨曜家族",
+      "description": "作為四大貴族墨曜家族的一員，墨鏑從出生的那一刻便享受著其他人可能一輩子都體驗不到的奢華生活，然而在那繁華之下，卻是冷漠的算計和疏離。在那讓人窒息的氣氛下，又一次的刺殺讓墨鏑厭倦了，她開始試圖逃離這樣讓人窒息的生活。最終，她帶上了兩名鬼族的奴隸護衛，混入了一艘商船之中，開始了自己的行商之旅。憑藉著天才般的頭腦和從小鍛鍊出的經驗以及直覺，墨鏑很快就在不同大陸之間的灰色渠道之中混的風生水起，而在又做完一筆生意後，他帶著貨物準備前往下一站-艾倫布拉德。"
+    },
+    {
+      "id": "hollow",
+      "name": "（其實沒有名子）／咚咚",
+      "avatar": "/assets/characters/hollow.png",
+      "role": "錯過純淨容器選拔賽的流浪容器",
+      "fate": "歸屬",
+      "status": "未知",
+      "affiliation": "未知",
+      "relationship": "未知",
+      "latestMove": "前往艾倫布拉德",
+      "originPlace": "聖巢之城底下的深淵，無限黑暗蔓延之地",
+      "description": "一群來自聖米凱亞拉國的探查小隊，來到這片島嶼探查是否有可以利用資源。在取得過這片土地上具有強烈詛咒、並且自然資源也沒有足夠稀有到需要付出抵抗詛咒成本開採的結論後，捕獲一隻路上遇到的原生生物當作樣本帶回去研究這片土地上的生物是如何抵抗詛咒生存的。殊不知在研究途中，發現這個生物居然表現出能夠與人交流的智慧，於是這個科技水平高但人（？）權水平更高的國家只能扼腕給予他自由民的身份。剛獲取自由民身份不久的容器由於習慣性和暫時沒有足以在外生活的技能，暫居於首都第一研究所內，以提供自身給研究人員研究換取能在外生活的知識與金錢。數年過去，小容器終於帶著足以自給自足的知識和終於還完貸款（知識...不是免費的...）而幾乎為之一空的錢包踏上歸（迷）鄉（路）的旅途。"
+    }
+  ],
+  "npcs": [
+    {
+      "id": "unknown1",
+      "name": "尚未鎖定該人物",
+      "avatar": "/assets/characters/unknown.png",
+      "role": "未知",
+      "fate": "未知",
+      "status": "未知",
+      "affiliation": "未知",
+      "relationship": "未知",
+      "latestMove": "艾倫布萊德 中段 12–22 層",
+      "originPlace": "未知",
+      "description": "未知"
+    }, {
+      "id": "unknown2",
+      "name": "尚未鎖定該人物",
+      "avatar": "/assets/characters/unknown.png",
+      "role": "未知",
+      "fate": "未知",
+      "status": "未知",
+      "affiliation": "未知",
+      "relationship": "未知",
+      "latestMove": "艾倫布萊德 塔底 23–33 層",
+      "originPlace": "未知",
+      "description": "未知"
+    }, {
+      "id": "unknown3",
+      "name": "尚未鎖定該人物",
+      "avatar": "/assets/characters/unknown.png",
+      "role": "未知",
+      "fate": "未知",
+      "status": "未知",
+      "affiliation": "未知",
+      "relationship": "未知",
+      "latestMove": "艾倫布萊德 塔底 23–33 層",
+      "originPlace": "未知",
+      "description": "未知"
+    }]
+}

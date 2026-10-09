@@ -1,5 +1,7 @@
 import { CountryPanel } from "./components/CountryPanel";
+import { FateClockMonitor } from "./components/FateClockMonitor";
 import { MapControls } from "./components/MapControls";
+import { PeopleMonitor } from "./components/PeopleMonitor";
 import { Timeline } from "./components/Timeline";
 import { WorldMap } from "./components/WorldMap";
 import { events, history, settingCards, settings } from "./data";
@@ -19,9 +21,11 @@ root.innerHTML = `
       <nav class="page-navigation" aria-label="主要頁面">
         <button class="page-nav-button is-active" type="button" data-view-target="map" aria-controls="map-page" aria-pressed="true">星圖</button>
         <button class="page-nav-button" type="button" data-view-target="log" aria-controls="world-log-page" aria-pressed="false">世界觀測LOG紀錄</button>
+        <button class="page-nav-button" type="button" data-view-target="people" aria-controls="people-page" aria-pressed="false">命定之人監控</button>
+        <button class="page-nav-button" type="button" data-view-target="fate-clock" aria-controls="fate-clock-page" aria-pressed="false">命刻監測系統</button>
       </nav>
       <div class="topbar-right">
-       <span class="world-status"><i class="status-dot"></i>系統狀態 :錯誤        </span>
+       <span class="world-status system-status"><i class="status-dot"></i>系統狀態：正常</span>
        <span class="world-status"><i class="status-dot"></i>女武神狀態 :失聯        </span>
         <span class="world-status"><i class="status-dot"></i>世界狀態 :未知        </span>
         <label class="page-zoom-control" for="page-zoom">
@@ -34,7 +38,7 @@ root.innerHTML = `
     <main class="main-content">
       <section class="page-view" id="map-page" data-page-view="map" aria-label="世界地圖首頁">
         <div class="intro-row">
-          <div><span class="eyebrow">MAIN SYSTEM · ${settings.timeline.yearLabel} · 時間:錯誤 </span><h1>莫比烏斯<span>星圖</span></h1></div>
+          <div><span class="eyebrow">MAIN SYSTEM · ${settings.timeline.yearLabel}</span><h1>莫比烏斯<span>星圖</span></h1></div>
           <p class="intro-note">大陸循著莫比烏斯之環漂流。每一次交會，<br />都是相逢，也是告別。</p>
         </div>
         <section class="timeline-card" id="chronicle" aria-label="世界時間線"></section>
@@ -74,6 +78,24 @@ root.innerHTML = `
           </div>
         </section>
       </section>
+      <section class="page-view" id="people-page" data-page-view="people" aria-label="命定之人監控" hidden>
+        <div class="intro-row">
+          <div><span class="eyebrow">FATED PERSONNEL · CHARACTER INDEX</span><h1>命定之人<span>監控</span></h1></div>
+          <p class="intro-note">記錄旅人與世界人物的身分、命定關係，<br />以及旅途中持續變化的狀態。</p>
+        </div>
+        <section class="people-intro-grid" aria-label="玩家角色與 NPC 介紹"></section>
+      </section>
+      <section class="page-view" id="fate-clock-page" data-page-view="fate-clock" aria-label="命刻監測系統" hidden>
+        <div class="intro-row">
+          <div><span class="eyebrow">FATE CLOCK · SYSTEM MONITOR</span><h1>命刻<span>監測系統</span></h1></div>
+          <p class="intro-note">刻度代表各命刻可承受的總步數；<br />使用上下按鈕調整目前進度。</p>
+        </div>
+        <section class="fate-clock-status" aria-label="命刻系統狀態">
+          <div><span class="eyebrow">命刻系統狀態</span><h2>危機監測中</h2></div>
+          <p>目前顯示「已推進命刻／總命刻」。</p>
+        </section>
+        <section class="fate-clock-grid" aria-label="命刻進度"></section>
+      </section>
       <footer class="footer-note">
         <span>✦ 傳說的盡頭，仍有人願意前行。</span>
         <span>虛空海會腐蝕固體 · 跨越請搭乘飛空艇或傳送法陣</span>
@@ -90,24 +112,53 @@ const timelineRoot = root.querySelector<HTMLElement>(".timeline-card");
 const controlsRoot = root.querySelector<HTMLElement>(".map-control-host");
 const mapPage = root.querySelector<HTMLElement>("#map-page");
 const worldLogPage = root.querySelector<HTMLElement>("#world-log-page");
-const mapViewButton = root.querySelector<HTMLButtonElement>('[data-view-target="map"]');
-const logViewButton = root.querySelector<HTMLButtonElement>('[data-view-target="log"]');
-if (!mapRoot || !panelRoot || !travelRoot || !timelineRoot || !controlsRoot || !mapPage || !worldLogPage || !mapViewButton || !logViewButton) {
+const pageViews = [...root.querySelectorAll<HTMLElement>("[data-page-view]")];
+const pageViewButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-view-target]")];
+const fateClockRoot = root.querySelector<HTMLElement>(".fate-clock-grid");
+if (!mapRoot || !panelRoot || !travelRoot || !timelineRoot || !controlsRoot || !mapPage || !worldLogPage || !fateClockRoot || pageViews.length !== pageViewButtons.length) {
   throw new Error("A required application region is missing.");
 }
 
-const setPageView = (view: "map" | "log") => {
-  const showMap = view === "map";
-  mapPage.hidden = !showMap;
-  worldLogPage.hidden = showMap;
-  mapViewButton.classList.toggle("is-active", showMap);
-  mapViewButton.setAttribute("aria-pressed", String(showMap));
-  logViewButton.classList.toggle("is-active", !showMap);
-  logViewButton.setAttribute("aria-pressed", String(!showMap));
+type PageView = "map" | "log" | "people" | "fate-clock";
+let pageSwitchTimer: number | undefined;
+const setPageView = (view: PageView) => {
+  const activePage = pageViews.find((page) => !page.hidden);
+  const targetPage = pageViews.find((page) => page.dataset.pageView === view);
+  if (!targetPage) throw new Error(`Page view "${view}" was not found.`);
+
+  if (pageSwitchTimer !== undefined) {
+    window.clearTimeout(pageSwitchTimer);
+    pageSwitchTimer = undefined;
+  }
+
+  if (activePage === targetPage) {
+    activePage.classList.remove("is-leaving");
+  } else {
+    activePage?.classList.add("is-leaving");
+    pageSwitchTimer = window.setTimeout(() => {
+      pageViews.forEach((page) => {
+        page.hidden = page !== targetPage;
+        page.classList.remove("is-leaving", "is-entering");
+      });
+      targetPage.classList.add("is-entering");
+      pageSwitchTimer = undefined;
+      window.setTimeout(() => targetPage.classList.remove("is-entering"), 850);
+    }, activePage ? 150 : 0);
+  }
+
+  pageViewButtons.forEach((button) => {
+    const isActive = button.dataset.viewTarget === view;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
 };
 
-mapViewButton.addEventListener("click", () => setPageView("map"));
-logViewButton.addEventListener("click", () => setPageView("log"));
+pageViewButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const view = button.dataset.viewTarget as PageView | undefined;
+    if (view) setPageView(view);
+  });
+});
 
 const pageZoomInput = root.querySelector<HTMLInputElement>("#page-zoom");
 const pageZoomValue = root.querySelector<HTMLOutputElement>("#page-zoom-value");
@@ -141,6 +192,11 @@ new MapControls(controlsRoot, {
   toggleMotion: (enabled) => document.body.classList.toggle("reduce-motion", !enabled),
   toggleMobius: (enabled) => state.setMobiusVisible(enabled)
 });
+
+new FateClockMonitor(fateClockRoot);
+const peopleRoot = root.querySelector<HTMLElement>(".people-intro-grid");
+if (!peopleRoot) throw new Error("People monitor region is missing.");
+new PeopleMonitor(peopleRoot);
 
 state.subscribe((snapshot) => {
   map.render(snapshot);

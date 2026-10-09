@@ -27,6 +27,8 @@ npm run build
 - 透過世界觀測紀錄頁的時間線瀏覽旅行日、世界事件、大陸位置和交會狀態；年表與世界觀設定卡片也可編輯。
 - 在航路推演中選擇大陸或空島作為出發地／目的地，查看飛行與傳送選項。步行只在符合條件的大陸接觸時可用。出發地會保存在目前瀏覽器。
 - 可設定頁面顯示比例（80%–150%）；頁面比例也會保存在目前瀏覽器。
+- 新增「命定之人監控」角色介紹架構，以及可調整命刻進度的「命刻監測系統」。
+- 命定之人頁面的玩家與 NPC 可由 JSON 資料載入，並支援頭像圖片路徑。
 
 ## GitHub Pages 部署
 
@@ -110,9 +112,72 @@ npm run build
 
 卡片顯示順序就是 JSON 陣列順序；可新增、刪除或移動陣列項目以調整首頁內容。
 
+### 命刻設定：`fateClocks.json`
+
+檔案：[`src/data/fateClocks.json`](./src/data/fateClocks.json)。陣列中的每筆資料會生成一個命刻時鐘：
+
+```json
+{
+  "id": "awakening",
+  "title": "甦醒命刻",
+  "total": 4,
+  "initialValue": 0,
+  "description": "留聲筒播放完畢前，必須奪回意識。"
+}
+```
+
+- `id`：命刻識別碼，需唯一。
+- `title`：命刻名稱。
+- `total`：時鐘總刻度，需為正整數。
+- `initialValue`：頁面載入時已推進的初始命刻數，介於 `0` 與 `total` 之間。
+- `description`：此命刻的規則或說明。
+
+頁面以「已推進命刻／總命刻」顯示進度；初始進度依 `initialValue` 設定，上下按鈕會調整已推進命刻，範圍限制在 `0` 至 `total`。命刻卡片的狀態按鈕會依序切換「進行中 → 已達成 → 已過期」，卡片在結束狀態仍會保留顯示；按下 × 並確認後會隱藏該命刻。狀態與刪除記錄會保存在目前瀏覽器的 `localStorage`；新增命刻時在 JSON 陣列加入一筆資料即可。
+
+### 玩家與 NPC：`people.json`
+
+檔案：[`src/data/people.json`](./src/data/people.json)。在 `players` 或 `npcs` 陣列新增角色資料，儲存後重新建置即可顯示。範例：
+
+```json
+{
+  "players": [
+    {
+      "id": "sample-player",
+      "name": "角色名稱",
+      "avatar": "/assets/characters/sample-player.png",
+      "originPlace": "起源之地",
+      "role": "角色身分",
+      "affiliation": "所屬或立場",
+      "fate": "命定關係",
+      "relationship": "與其他人物的關係",
+      "status": "目前狀態",
+      "latestMove": "最近動向",
+      "description": "角色介紹"
+    }
+  ],
+  "npcs": [
+    {
+      "id": "sample-npc",
+      "name": "人物名稱",
+      "avatar": "/assets/characters/sample-npc.png",
+      "originPlace": "起源之地",
+      "role": "角色身分",
+      "affiliation": "所屬或立場",
+      "fate": "命定關係",
+      "relationship": "與其他人物的關係",
+      "status": "目前狀態",
+      "latestMove": "最近動向",
+      "description": "人物介紹"
+    }
+  ]
+}
+```
+
+玩家與 NPC 完全共用同一組人物欄位，新增任一類人物時都可使用上述全部欄位；只有 `id` 和 `name` 必填，其餘欄位均可省略，未提供的欄位不會顯示。`id` 在玩家與 NPC 之間也需保持唯一。`avatar` 可省略；填入時使用 `public` 目錄下的網址路徑，例如 `/assets/characters/sample-player.png`，並將圖片放在 `public/assets/characters/`。未設定頭像或圖片無法載入時會顯示姓名縮寫。
+
 ### 瀏覽器個人設定
 
-網頁大小（80%–150%）和航路推演出發地會保存在目前瀏覽器的 `localStorage`，不屬於 JSON 世界資料，也不會同步到其他裝置。出發地可在航路推演面板中選擇大陸或空島。
+網頁大小（80%–150%）、航路推演出發地和命刻狀態／刪除記錄會保存在目前瀏覽器的 `localStorage`，不屬於 JSON 世界資料，也不會同步到其他裝置。命刻進度目前只在當次頁面載入期間調整；重新載入頁面會回到 `initialValue`。出發地可在航路推演面板中選擇大陸或空島。
 
 請保留 JSON 格式有效、物件欄位名稱與型別正確，並確保所有關聯 ID 對得上。資料型別及匯出集中在 [`src/data/types.ts`](./src/data/types.ts) 與 [`src/data/index.ts`](./src/data/index.ts)。
 
@@ -123,6 +188,8 @@ public/assets/             靜態地圖、國家、空島與音樂素材
 src/components/            地圖、地點面板、時間線與控制元件
 src/data/world.json        世界、國家、空島、事件、年表與系統參數
 src/data/settingCards.json 首頁世界設定卡片內容
+src/data/fateClocks.json   命刻時鐘與規則
+src/data/people.json       玩家角色與 NPC 人物資料
 src/data/types.ts          世界資料型別
 src/data/index.ts          應用程式資料匯出
 src/systems/               莫比烏斯環、空島漂移與世界狀態

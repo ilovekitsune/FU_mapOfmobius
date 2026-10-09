@@ -38,6 +38,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .topbar-right { display: flex; align-items: center; gap: 22px; font-size: 12px; font-weight: 600; letter-spacing: .04em; color: #d0c4d2; }
 .world-status { display: inline-flex; align-items: center; gap: 8px; }
 .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #ee789e; box-shadow: 0 0 10px #ee789e; }
+.system-status .status-dot { background: #86c89a; box-shadow: 0 0 10px rgba(134,200,154,.7); }
 .page-navigation { display: flex; align-items: center; gap: 20px; }
 .page-nav-button { border: 0; border-bottom: 1px solid transparent; padding: 5px 0; background: transparent; color: #d0c4d2; font-size: 12px; font-weight: 700; white-space: nowrap; cursor: pointer; }
 .page-nav-button:hover, .page-nav-button.is-active { color: #f0c8e3; border-bottom-color: #8f5b7f; }
@@ -47,6 +48,61 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 
 .main-content { max-width: 1600px; margin: 0 auto; padding: 33px 4.1vw 30px; }
 .page-view[hidden] { display: none; }
+.page-view { position: relative; }
+.page-view.is-entering::after {
+  position: absolute; inset: 0; z-index: 5; pointer-events: none; content: "";
+  background:
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(255,190,232,.08) 3px 4px),
+    linear-gradient(90deg, transparent 0%, rgba(237,117,183,.08) 48%, rgba(237,117,183,.02) 52%, transparent 100%);
+  background-size: 100% 5px, 220% 100%;
+  mix-blend-mode: screen;
+  animation: system-scan-in .62s steps(2, end) both;
+}
+.page-view.is-leaving > * { animation: system-fade-out .15s ease-in both; }
+.page-view.is-entering > .intro-row,
+.page-view.is-entering > .timeline-card,
+.page-view.is-entering > .map-layout,
+.page-view.is-entering > .country-panel,
+.page-view.is-entering > .world-setting,
+.page-view.is-entering > .history-card,
+.page-view.is-entering > .people-intro-grid,
+.page-view.is-entering > .fate-clock-status,
+.page-view.is-entering > .fate-clock-grid {
+  animation: system-fade-in .48s cubic-bezier(.2,.75,.25,1) both;
+}
+.page-view.is-entering > .timeline-card,
+.page-view.is-entering > .map-layout,
+.page-view.is-entering > .world-setting,
+.page-view.is-entering > .people-intro-grid,
+.page-view.is-entering > .fate-clock-grid { animation-delay: .08s; }
+.page-view.is-entering > .country-panel,
+.page-view.is-entering > .history-card { animation-delay: .15s; }
+.page-view.is-entering .setting-card,
+.page-view.is-entering .history-entry,
+.page-view.is-entering .people-section-card,
+.page-view.is-entering .fate-clock-card {
+  animation: system-fade-in .42s cubic-bezier(.2,.75,.25,1) both;
+}
+.page-view.is-entering .setting-card:nth-child(2),
+.page-view.is-entering .history-entry:nth-child(2),
+.page-view.is-entering .people-section-card:nth-child(2),
+.page-view.is-entering .fate-clock-card:nth-child(2) { animation-delay: .08s; }
+.page-view.is-entering .setting-card:nth-child(3),
+.page-view.is-entering .history-entry:nth-child(3) { animation-delay: .14s; }
+@keyframes system-fade-in {
+  from { opacity: 0; transform: translateY(12px); filter: blur(3px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+@keyframes system-fade-out {
+  to { opacity: 0; transform: translateY(-5px); filter: blur(2px); }
+}
+@keyframes system-scan-in {
+  0% { opacity: 0; background-position: 0 0, 100% 0; }
+  22% { opacity: .75; background-position: 0 -11px, 0 0; }
+  48% { opacity: .2; background-position: 0 8px, 40% 0; }
+  72% { opacity: .45; background-position: 0 -4px, 70% 0; }
+  100% { opacity: 0; background-position: 0 0, 100% 0; }
+}
 .intro-row { display: flex; justify-content: space-between; align-items: end; margin-bottom: 18px; }
 .eyebrow, .panel-kicker { color: #ff9bd1; font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
 .intro-row h1 { margin: 7px 0 0; font: 700 34px/1.15 var(--serif); letter-spacing: .025em; }
@@ -207,17 +263,74 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .history-date { color: #f0a7d0; font-size: 10px; font-weight: 700; letter-spacing: .03em; padding-top: 2px; }
 .history-entry h3 { margin: 0; color: #f2e7f2; font-size: 12px; font-weight: 700; }
 .history-entry p { margin: 4px 0 0; color: #c1b5c4; font-size: 11px; font-weight: 500; line-height: 1.8; }
+.people-intro-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+.people-section-card, .fate-clock-status, .fate-clock-card { border: 1px solid var(--line); background: linear-gradient(145deg, rgba(31,24,35,.9), rgba(20,16,24,.92)); }
+.people-section-card { padding: 24px; }
+.people-section-card h2, .fate-clock-status h2 { margin: 7px 0; color: #fff0fa; font: 700 22px/1.4 var(--serif); }
+.people-section-card > p, .fate-clock-status > p { margin: 0; color: #c7bdca; font-size: 12px; line-height: 1.9; }
+.people-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-top: 19px; }
+.person-card { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 13px; padding: 14px; border: 1px solid rgba(236,194,224,.12); background: rgba(255,255,255,.025); }
+.person-avatar { position: relative; width: 72px; height: 72px; overflow: hidden; display: grid; place-items: center; border: 1px solid rgba(237,117,183,.3); background: radial-gradient(circle, rgba(237,117,183,.18), rgba(20,16,24,.9)); color: #f0a7d0; font: 600 24px var(--serif); }
+.person-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.person-avatar.is-missing img { display: none; }
+.person-card-copy { min-width: 0; }
+.person-card-copy h3 { margin: 0 0 5px; color: #fff0fa; font-size: 14px; font-weight: 700; }
+.person-card-copy > p { margin: 0; color: #c7bdca; font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; }
+.person-card-copy .person-description { margin-top: 7px; color: #b9abbc; }
+.people-empty { grid-column: 1 / -1; margin: 0; padding: 22px 14px; border: 1px dashed rgba(236,194,224,.16); color: #b9abbc; text-align: center; font-size: 12px; line-height: 1.8; }
+.fate-clock-status { display: flex; align-items: center; justify-content: space-between; gap: 25px; margin-bottom: 15px; padding: 18px 22px; }
+.fate-clock-status h2 { margin-bottom: 0; font-size: 18px; }
+.fate-clock-status > p { max-width: 570px; }
+.fate-clock-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+.fate-clock-card { padding: 21px 23px; }
+.fate-clock-heading { display: flex; align-items: center; justify-content: space-between; }
+.fate-clock-heading h2 { margin: 6px 0 0; color: #fff0fa; font: 700 21px/1.3 var(--serif); }
+.fate-clock-actions { display: flex; align-items: center; gap: 7px; }
+.fate-clock-status-badge { padding: 4px 8px; border: 1px solid rgba(237,117,183,.25); color: #f0a7d0; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.fate-clock-status-button, .fate-clock-delete { min-height: 29px; border: 1px solid var(--line); background: rgba(255,255,255,.025); color: #d9cedd; cursor: pointer; }
+.fate-clock-status-button { padding: 0 9px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.fate-clock-delete { width: 29px; padding: 0; color: #cf879b; font-size: 19px; line-height: 1; }
+.fate-clock-status-button:hover { border-color: rgba(237,117,183,.55); color: var(--pink-bright); }
+.fate-clock-delete:hover { border-color: rgba(224,103,133,.6); background: rgba(224,103,133,.12); color: #ff9eae; }
+.fate-clock-card[data-status="achieved"] .fate-clock-status-badge { border-color: rgba(134,200,154,.4); color: #a9d9b5; }
+.fate-clock-card[data-status="achieved"] .fate-clock-status-button { color: #a9d9b5; }
+.fate-clock-card[data-status="expired"] .fate-clock-status-badge { border-color: rgba(230,161,111,.4); color: #e6a16f; }
+.fate-clock-card[data-status="expired"] .fate-clock-status-button { color: #e6a16f; }
+.fate-clock-card[data-clock-id="crisis"] .fate-clock-status-badge { border-color: rgba(230,161,111,.25); color: #e6a16f; }
+.fate-clock-card[data-clock-id="crisis"][data-status="achieved"] .fate-clock-status-badge { border-color: rgba(134,200,154,.4); color: #a9d9b5; }
+.fate-clock-card[data-clock-id="crisis"][data-status="expired"] .fate-clock-status-badge { border-color: rgba(230,161,111,.4); color: #e6a16f; }
+.fate-clock-card[data-clock-id="unknown"] .fate-clock-indicator { color: #b9abbc; }
+.fate-clock-content { display: flex; align-items: center; justify-content: center; gap: 28px; padding: 20px 0 13px; }
+.fate-clock-face { position: relative; display: grid; width: 168px; height: 168px; flex: 0 0 168px; place-items: center; border: 1px solid rgba(237,117,183,.24); border-radius: 50%; background: radial-gradient(circle, rgba(237,117,183,.08), rgba(20,16,24,.68) 66%); box-shadow: 0 0 26px rgba(237,117,183,.08), inset 0 0 22px rgba(237,117,183,.06); }
+.fate-clock-card[data-clock-id="crisis"] .fate-clock-face { border-color: rgba(230,161,111,.3); box-shadow: 0 0 26px rgba(230,161,111,.08), inset 0 0 22px rgba(230,161,111,.06); }
+.fate-clock-tick { position: absolute; top: 50%; left: 50%; width: 3px; height: 9px; border-radius: 2px; background: #554052; transform: rotate(var(--tick-angle)) translateY(-69px); transform-origin: 50% 0; }
+.fate-clock-tick.is-filled { background: #f18bc4; box-shadow: 0 0 8px rgba(237,117,183,.75); }
+.fate-clock-card[data-clock-id="crisis"] .fate-clock-tick.is-filled { background: #e6a16f; box-shadow: 0 0 8px rgba(230,161,11１,.75); }
+.fate-clock-card[data-clock-id="unknown"] .fate-clock-tick.is-filled { background: #b9abbc; box-shadow: 0 0 8px rgba(185,171,188,.75); }
+.fate-clock-center { display: flex; align-items: center; flex-direction: column; gap: 4px; color: #b9abbc; font-size: 10px; }
+.fate-clock-card[data-clock-id="crisis"] .fate-clock-step { border-color: rgba(230,161,111,.35); color: #e6a16f; }
+.fate-clock-card[data-clock-id="unknown"] .fate-clock-step { border-color: rgba(185,171,188,.35); color: #b9abbc; }
+.fate-clock-step:hover:not(:disabled) { border-color: var(--pink-bright); background: rgba(237,117,183,.14); }
+.fate-clock-step:disabled { opacity: .35; cursor: default; }
+.fate-clock-description { min-height: 42px; margin: 0; padding-top: 12px; border-top: 1px solid rgba(236,194,224,.1); color: #c7bdca; font-size: 12px; line-height: 1.8; }
 .footer-note { display: flex; justify-content: space-between; color: #b8aaba; font-size: 11px; font-weight: 600; padding: 17px 0 0; letter-spacing: .02em; }
 .footer-note span:first-child { color: #d4a6c7; }
 
 @keyframes beacon { 50% { opacity: .35; r: 6px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; } }
 body.reduce-motion *, body.reduce-motion *::before, body.reduce-motion *::after { animation: none !important; transition: none !important; }
+@media (max-width: 1400px) {
+  .page-navigation { order: 3; flex: 0 0 100%; justify-content: center; flex-wrap: wrap; row-gap: 8px; }
+  .topbar-right { flex-wrap: wrap; justify-content: flex-end; }
+  .world-status { white-space: nowrap; }
+}
 @media (max-width: 1000px) {
   .topbar { height: auto; min-height: 76px; padding-top: 10px; padding-bottom: 10px; flex-wrap: wrap; }
   .topbar-right { margin-left: auto; }
   .page-navigation { order: 3; flex: 0 0 100%; justify-content: center; }
   .world-setting { grid-template-columns: 1fr 1fr; }
+  .page-navigation { gap: 13px; }
+  .page-nav-button { font-size: 11px; }
   .prologue-card { grid-column: 1 / -1; }
   .map-layout { grid-template-columns: minmax(0, 1fr) 270px; }
   .map-card { height: 560px; }
@@ -235,6 +348,9 @@ body.reduce-motion *, body.reduce-motion *::before, body.reduce-motion *::after 
   .intro-row h1 { font-size: 27px; }
   .intro-note { max-width: none; text-align: left; }
   .world-setting { grid-template-columns: 1fr; }
+  .people-intro-grid, .fate-clock-grid { grid-template-columns: 1fr; }
+  .fate-clock-status { align-items: flex-start; flex-direction: column; gap: 7px; }
+  .people-section-card { padding: 19px 16px; }
   .prologue-card { grid-column: auto; }
   .map-layout { grid-template-columns: 1fr; }
   .map-card { height: min(68vh, 550px); min-height: 390px; }
