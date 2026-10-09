@@ -32,9 +32,14 @@ const escapeHtml = (value: string): string => value.replace(/[&<>"']/g, (charact
   return entities[character];
 });
 
+const resolveAvatarUrl = (avatar: string): string => {
+  if (/^(https?:|data:|blob:)/i.test(avatar)) return avatar;
+  return `${import.meta.env.BASE_URL}${avatar.replace(/^\/+/, "")}`;
+};
+
 const profileCard = (person: PersonProfile): string => {
   const name = escapeHtml(person.name);
-  const avatar = person.avatar ? escapeHtml(person.avatar) : "";
+  const avatar = person.avatar ? escapeHtml(resolveAvatarUrl(person.avatar)) : "";
   const fallback = escapeHtml(person.name.slice(0, 2) || "✦");
   const fields: [string, string | undefined][] = [
     ["起源之地", person.originPlace],

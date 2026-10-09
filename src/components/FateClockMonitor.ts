@@ -13,6 +13,7 @@ type FateClockStatus = "active" | "achieved" | "expired";
 interface SavedFateClockState {
   statuses: Record<string, FateClockStatus>;
   deletedIds: string[];
+  values?: Record<string, number>;
 }
 
 const fateClocks = fateClocksData as FateClockConfig[];
@@ -33,7 +34,13 @@ const loadSavedState = (): SavedFateClockState => {
   if (Object.values(statuses).some((status) => !["active", "achieved", "expired"].includes(status))) {
     throw new Error("Saved fate clock state contains an unknown status.");
   }
-  return { statuses, deletedIds: deletedIds.filter((id): id is string => typeof id === "string") };
+  const values = "values" in parsed && parsed.values && typeof parsed.values === "object"
+    ? parsed.values as Record<string, number>
+    : {};
+  if (Object.values(values).some((value) => typeof value !== "number" || !Number.isFinite(value))) {
+    throw new Error("Saved fate clock state contains an invalid clock value.");
+  }
+  return { statuses, deletedIds: deletedIds.filter((id): id is string => typeof id === "string"), values };
 };
 
 const statusLabels: Record<FateClockStatus, string> = {
@@ -81,12 +88,17 @@ export class FateClockMonitor {
     `).join("");
 
     fateClocks.filter((clock) => !this.deletedIds.has(clock.id)).forEach((clock) => {
-      this.values.set(clock.id, Math.max(0, Math.min(clock.total, clock.initialValue)));
+      const savedValue = savedState.values?.[clock.id];
+      this.values.set(
+        clock.id,
+        Math.max(0, Math.min(clock.total, savedValue ?? clock.initialValue))
+      );
       const card = this.root.querySelector<HTMLElement>(`[data-clock-id="${clock.id}"]`);
       card?.querySelectorAll<HTMLButtonElement>("[data-step]").forEach((button) => {
         button.addEventListener("click", () => {
           const nextValue = (this.values.get(clock.id) ?? 0) + Number(button.dataset.step);
           this.values.set(clock.id, Math.max(0, Math.min(clock.total, nextValue)));
+          this.saveState();
           this.updateClock(clock);
         });
       });
@@ -111,7 +123,8 @@ export class FateClockMonitor {
   private saveState(): void {
     localStorage.setItem(stateStorageKey, JSON.stringify({
       statuses: this.statuses,
-      deletedIds: [...this.deletedIds]
+      deletedIds: [...this.deletedIds],
+      values: Object.fromEntries(this.values)
     }));
   }
 
