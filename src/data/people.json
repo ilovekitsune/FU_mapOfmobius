@@ -31,7 +31,7 @@
     {
       "id": "unknown1",
       "name": "尚未鎖定該人物",
-      "avatar": "/assets/characters/unknown.png",
+      "avatar": "/assets/characters/unknown_s.png",
       "role": "未知",
       "fate": "未知",
       "status": "未知",
@@ -43,7 +43,7 @@
     }, {
       "id": "unknown2",
       "name": "尚未鎖定該人物",
-      "avatar": "/assets/characters/unknown.png",
+      "avatar": "/assets/characters/unknown_s.png",
       "role": "未知",
       "fate": "未知",
       "status": "未知",
@@ -55,7 +55,7 @@
     }, {
       "id": "unknown3",
       "name": "尚未鎖定該人物",
-      "avatar": "/assets/characters/unknown.png",
+      "avatar": "/assets/characters/unknown_s.png",
       "role": "未知",
       "fate": "未知",
       "status": "未知",
