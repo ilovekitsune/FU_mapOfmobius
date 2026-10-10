@@ -1,4 +1,5 @@
 import fateClocksData from "../data/fateClocks.json";
+import gmSettings from "../data/GM_setting.json";
 
 interface FateClockConfig {
   id: string;
@@ -17,6 +18,7 @@ interface SavedFateClockState {
 }
 
 const fateClocks = fateClocksData as FateClockConfig[];
+const isGMMode = gmSettings[0]?.GM_mode === true;
 const stateStorageKey = "fabula-fate-clock-state";
 
 const loadSavedState = (): SavedFateClockState => {
@@ -55,7 +57,9 @@ export class FateClockMonitor {
   private readonly deletedIds: Set<string>;
 
   constructor(private readonly root: HTMLElement) {
-    const savedState = loadSavedState();
+    const savedState = isGMMode
+      ? loadSavedState()
+      : { statuses: {}, deletedIds: [], values: {} };
     this.statuses = savedState.statuses;
     this.deletedIds = new Set(savedState.deletedIds);
     this.root.innerHTML = fateClocks.filter((clock) => !this.deletedIds.has(clock.id)).map((clock) => `
@@ -64,8 +68,10 @@ export class FateClockMonitor {
           <div><span class="panel-kicker">FATE CLOCK · ${clock.total} SEGMENTS</span><h2>${clock.title}</h2></div>
           <div class="fate-clock-actions">
             <span class="fate-clock-status-badge"></span>
-            <button class="fate-clock-status-button" type="button" aria-label="切換${clock.title}狀態"></button>
-            <button class="fate-clock-delete" type="button" aria-label="刪除${clock.title}" title="刪除命刻">×</button>
+            ${isGMMode ? `
+              <button class="fate-clock-status-button" type="button" aria-label="切換${clock.title}狀態"></button>
+              <button class="fate-clock-delete" type="button" aria-label="刪除${clock.title}" title="刪除命刻">×</button>
+            ` : ""}
           </div>
         </div>
         <div class="fate-clock-content">
@@ -78,10 +84,12 @@ export class FateClockMonitor {
               <span>已推進命刻</span>
             </div>
           </div>
-          <div class="fate-clock-controls">
-            <button class="fate-clock-step" type="button" data-step="1" aria-label="增加${clock.title}進度">＋</button>
-            <button class="fate-clock-step" type="button" data-step="-1" aria-label="減少${clock.title}進度">－</button>
-          </div>
+          ${isGMMode ? `
+            <div class="fate-clock-controls">
+              <button class="fate-clock-step" type="button" data-step="1" aria-label="增加${clock.title}進度">＋</button>
+              <button class="fate-clock-step" type="button" data-step="-1" aria-label="減少${clock.title}進度">－</button>
+            </div>
+          ` : ""}
         </div>
         <p class="fate-clock-description">${clock.description}</p>
       </article>
@@ -121,6 +129,7 @@ export class FateClockMonitor {
   }
 
   private saveState(): void {
+    if (!isGMMode) return;
     localStorage.setItem(stateStorageKey, JSON.stringify({
       statuses: this.statuses,
       deletedIds: [...this.deletedIds],

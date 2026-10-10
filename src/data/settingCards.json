@@ -1,14 +1,14 @@
 [
   {
     "eyebrow": "主線故事",
-    "title": "歡迎來到艾倫布萊德",
+    "title": "審訊",
     "className": "prologue-card",
     "paragraphs": [
       {
-        "text": "命運的起始：艾倫布萊德"
+        "text": "審訊是旅人們的第一個任務，審訊的結果將決定旅人們的命運。"
       },
       {
-        "text": "命運還未接露，不過旅人們已經踏上了旅程。",
+        "text": "被中層防衛軍逮捕的旅人們，該如何脫身呢?",
         "emphasis": true
       }
     ]

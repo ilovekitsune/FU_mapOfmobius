@@ -42,7 +42,7 @@
       }
     },
     "continentDrift": {
-      "orbitPeriodDays": 50,
+      "orbitPeriodDays": 365,
       "meetingApproachDays": 4,
       "innerMeetingGapRatio": 0.5,
       "edgeMeetingGapRatio": 0.5
@@ -99,7 +99,7 @@
 
     {
       "id": "north-fragment",
-      "name": "未知大陸",
+      "name": "未知大陸1",
       "subtitle": "國度與傳聞，留待旅人書寫",
       "shape": "rectangle",
       "width": 100,
@@ -135,7 +135,7 @@
     },
     {
       "id": "unknown-fragment1",
-      "name": "未知大陸",
+      "name": "未知大陸2",
       "subtitle": "尚未命名的遠方",
       "shape": "irregular",
       "width": 150,
@@ -312,29 +312,31 @@
   "islands": [
     {
       "id": "raven",
-      "name": "未知空島",
+      "name": "未知空島1",
       "x": 589,
       "y": 165,
       "size": 25,
       "movement": "drifting",
+      "orbitPeriodDays": 120,
       "dungeon": "未知地城",
       "description": "謠言說這裡是一座無人能長久追蹤的空島，島底垂掛著一座倒懸的古老修道院。",
       "phase": 0.4
     },
     {
       "id": "raven2",
-      "name": "空島",
+      "name": "空島2",
       "x": 891,
       "y": 489,
       "size": 20,
       "movement": "drifting",
+      "orbitPeriodDays": 120,
       "dungeon": "未知地城",
       "description": "謠言說這裡島心有一口從未敲響的巨鐘。島嶼每隔數小時便會改變方向。",
       "phase": 1.7
     },
     {
       "id": "lantern",
-      "name": "未知空島",
+      "name": "未知空島3",
       "x": 347,
       "y": 573,
       "size": 17,
@@ -344,11 +346,12 @@
     },
     {
       "id": "wound",
-      "name": "未知空島",
+      "name": "未知空島4",
       "x": 1031,
       "y": 253,
       "size": 15,
       "movement": "drifting",
+      "orbitPeriodDays": 200,
       "dungeon": "未知地城",
       "description": "謠言說這裡是一座環繞著空間裂縫的微型浮島，接近時會聽見尚未發生的記憶。",
       "phase": 3.3
@@ -359,6 +362,12 @@
       "day": 0,
       "title": "命運的起始：艾倫布萊德",
       "description": "MS 399 年，命運引領著旅人抵達於此。",
+      "locationId": "iron-blood",
+      "type": "story"
+    },{
+      "day": 1,
+      "title": "中層防衛軍的逮捕了，迫降於艾倫布萊德的走私犯人",
+      "description": "迫降於艾倫布萊德的走私犯人，因為通知聯絡接港且飛艇為黑戶而被中層防衛軍逮捕。審訊中",
       "locationId": "iron-blood",
       "type": "story"
     },
@@ -372,14 +381,19 @@
   ],
   "history": [
     {
-      "date": "MS 前",
+      "date": "MS   前 ?? 年",
       "title": "神明之戰",
       "description": "魔法世界的神明彼此開戰，留下足以動搖神明層級的魔法遺產。"
     },
     {
-      "date": "MS 前",
+      "date": "MS 前 ?? 年",
       "title": "機械叛亂",
       "description": "機械世界的人工智慧造物發起叛亂，機械文明從此不再相信造物主。"
+    },
+    {
+      "date": "MS 前 ?? 年",
+      "title": "世界破碎",
+      "description": "魔法世界與機械世界的戰爭導致世界破碎，形成了漂浮在虛空中的莫比烏斯環。"
     },
     {
       "date": "MS 前 13 年",

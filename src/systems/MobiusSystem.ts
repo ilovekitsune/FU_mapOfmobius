@@ -16,8 +16,8 @@ export interface UpcomingMeeting {
 function getOrbitPosition(angleDegrees: number): { x: number; y: number } {
   const angle = (angleDegrees * Math.PI) / 180;
   return {
-    x: settings.orbit.centerX + settings.orbit.radiusX * Math.cos(angle),
-    y: settings.orbit.centerY + settings.orbit.radiusY * Math.sin(angle)
+    x: settings.orbit.centerX + settings.orbit.radiusX * Math.sin(angle),
+    y: settings.orbit.centerY - settings.orbit.radiusY * Math.sin(2 * angle)
   };
 }
 

@@ -168,6 +168,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .map-control-group { display: flex; flex-direction: column; background: rgba(20,15,24,.88); border: 1px solid var(--line); }
 .map-control-button { width: 34px; height: 34px; border: 0; background: transparent; color: #ddc9da; cursor: pointer; }
 .map-control-button:hover { color: var(--pink-bright); background: rgba(237,117,183,.1); }
+.starfield-button { padding: 8px 11px; border: 1px solid rgba(237,117,183,.38); background: rgba(20,15,24,.9); color: #f0c5df; font-size: 11px; font-weight: 700; cursor: pointer; }
+.starfield-button:hover { border-color: var(--pink-bright); background: rgba(237,117,183,.12); color: #fff0fa; }
 .control-separator { height: 1px; background: var(--line); }
 .mobius-toggle, .motion-toggle { display: flex; align-items: center; gap: 6px; color: #e0d4e2; font-size: 11px; font-weight: 600; cursor: pointer; }
 .mobius-toggle input { position: absolute; opacity: 0; }
@@ -180,6 +182,17 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .toggle-track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 6px; height: 6px; border-radius: 50%; background: #a894aa; transition: transform .2s; }
 .motion-toggle input:checked + .toggle-track { border-color: #d765a7; }
 .motion-toggle input:checked + .toggle-track::after { transform: translateX(11px); background: #f188c5; box-shadow: 0 0 6px #ed75b7; }
+.world-map-dialog { width: min(1200px, calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 32px); padding: 18px; border: 1px solid rgba(231,171,214,.35); background: #141019; color: #f6e9f3; box-shadow: 0 24px 90px rgba(0,0,0,.72), 0 0 50px rgba(193,63,146,.18); }
+.world-map-dialog::backdrop { background: rgba(8,6,12,.8); backdrop-filter: blur(5px); }
+.world-map-dialog-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 13px; }
+.world-map-dialog-heading h2 { margin: 4px 0 0; color: #fff0fa; font: 700 22px/1.3 var(--serif); }
+.world-map-dialog-heading form { margin: 0; }
+.world-map-dialog-close { width: 36px; height: 36px; border: 1px solid var(--line); background: rgba(255,255,255,.025); color: #e6cddd; font-size: 24px; line-height: 1; cursor: pointer; }
+.world-map-dialog-close:hover { border-color: var(--pink-bright); color: #fff0fa; }
+.world-map-dialog-card { height: min(72vh, 760px); min-height: 360px; }
+.world-map-dialog-host { position: absolute; inset: 0; }
+.world-map-dialog-host .world-svg { transform: none !important; }
+.world-map-dialog-host .map-legend { bottom: 20px; }
 
 .country-panel, .travel-panel { border: 1px solid var(--line); background: linear-gradient(158deg, rgba(31,24,35,.97), rgba(20,16,24,.98)); }
 .country-panel { margin-top: 15px; padding: 23px 25px; }

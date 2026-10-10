@@ -4,6 +4,7 @@ export interface MapControlActions {
   reset: () => void;
   toggleMotion: (enabled: boolean) => void;
   toggleMobius: (enabled: boolean) => void;
+  showStarfield: () => void;
 }
 
 export class MapControls {
@@ -18,8 +19,9 @@ export class MapControls {
       <label class="mobius-toggle">
         <input type="checkbox" checked aria-label="顯示莫比烏斯之環" />
         <span class="toggle-track"></span>
-        <span>莫比烏斯環帶</span>
+        <span>莫比烏斯∞軌道</span>
       </label>
+      <button class="starfield-button" type="button" data-show-starfield>星域實景</button>
       <label class="motion-toggle"><input type="checkbox" checked /><span class="toggle-track"></span><span>漂移動畫</span></label>
     `;
     this.root.querySelector('[data-zoom="in"]')?.addEventListener("click", actions.zoomIn);
@@ -31,5 +33,6 @@ export class MapControls {
     this.root.querySelector<HTMLInputElement>(".mobius-toggle input")?.addEventListener("change", (event) => {
       actions.toggleMobius((event.target as HTMLInputElement).checked);
     });
+    this.root.querySelector<HTMLButtonElement>("[data-show-starfield]")?.addEventListener("click", actions.showStarfield);
   }
 }

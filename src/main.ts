@@ -49,6 +49,15 @@ root.innerHTML = `
           </div>
           <aside class="travel-panel" aria-label="航線推測"></aside>
         </section>
+        <dialog class="world-map-dialog" aria-labelledby="world-map-dialog-title">
+          <div class="world-map-dialog-heading">
+            <div><span class="eyebrow">STARFIELD · FULL VIEW</span><h2 id="world-map-dialog-title">星域實景</h2></div>
+            <form method="dialog"><button class="world-map-dialog-close" aria-label="關閉星域實景">×</button></form>
+          </div>
+          <div class="map-card world-map-dialog-card">
+            <div class="world-map-dialog-host"></div>
+          </div>
+        </dialog>
         <section class="country-panel" aria-label="國家與大陸介紹" aria-live="polite"></section>
       </section>
       <section class="page-view" id="world-log-page" data-page-view="log" aria-label="世界觀測紀錄" hidden>
@@ -88,7 +97,7 @@ root.innerHTML = `
       <section class="page-view" id="fate-clock-page" data-page-view="fate-clock" aria-label="命刻監測系統" hidden>
         <div class="intro-row">
           <div><span class="eyebrow">FATE CLOCK · SYSTEM MONITOR</span><h1>命刻<span>監測系統</span></h1></div>
-          <p class="intro-note">刻度代表各命刻可承受的總步數；<br />使用上下按鈕調整目前進度。</p>
+          <p class="intro-note">刻度代表各命刻可承受的總步數；<br />GM模式開啟時可調整進度、狀態與刪除命刻。</p>
         </div>
         <section class="fate-clock-status" aria-label="命刻系統狀態">
           <div><span class="eyebrow">命刻系統狀態</span><h2>危機監測中</h2></div>
@@ -110,12 +119,15 @@ const panelRoot = root.querySelector<HTMLElement>(".country-panel");
 const travelRoot = root.querySelector<HTMLElement>(".travel-panel");
 const timelineRoot = root.querySelector<HTMLElement>(".timeline-card");
 const controlsRoot = root.querySelector<HTMLElement>(".map-control-host");
+const mapDialog = root.querySelector<HTMLDialogElement>(".world-map-dialog");
+const mapDialogRoot = root.querySelector<HTMLElement>(".world-map-dialog-host");
+const mapDialogCard = root.querySelector<HTMLElement>(".world-map-dialog-card");
 const mapPage = root.querySelector<HTMLElement>("#map-page");
 const worldLogPage = root.querySelector<HTMLElement>("#world-log-page");
 const pageViews = [...root.querySelectorAll<HTMLElement>("[data-page-view]")];
 const pageViewButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-view-target]")];
 const fateClockRoot = root.querySelector<HTMLElement>(".fate-clock-grid");
-if (!mapRoot || !panelRoot || !travelRoot || !timelineRoot || !controlsRoot || !mapPage || !worldLogPage || !fateClockRoot || pageViews.length !== pageViewButtons.length) {
+if (!mapRoot || !panelRoot || !travelRoot || !timelineRoot || !controlsRoot || !mapDialog || !mapDialogRoot || !mapDialogCard || !mapPage || !worldLogPage || !fateClockRoot || pageViews.length !== pageViewButtons.length) {
   throw new Error("A required application region is missing.");
 }
 
@@ -167,9 +179,20 @@ const initialPageZoom = Number.isFinite(savedPageZoom) && savedPageZoom >= 80 &&
   ? savedPageZoom
   : 150;
 
+const sizeMapDialog = () => {
+  const pageScale = Number.parseFloat(document.documentElement.style.zoom) / 100 || 1;
+  const dialogWidth = Math.max(180, (window.innerWidth - 48) / pageScale);
+  const mapHeight = Math.max(220, Math.min(760, (window.innerHeight - 200) / pageScale));
+  mapDialog.style.width = `${dialogWidth}px`;
+  mapDialog.style.maxHeight = `${Math.max(260, (window.innerHeight - 32) / pageScale)}px`;
+  mapDialogCard.style.height = `${mapHeight}px`;
+  mapDialogCard.style.minHeight = `${mapHeight}px`;
+};
+
 const setPageZoom = (zoom: number) => {
   const boundedZoom = Math.max(80, Math.min(150, zoom));
   document.documentElement.style.setProperty("zoom", `${boundedZoom}%`);
+  sizeMapDialog();
   if (pageZoomInput) pageZoomInput.value = String(boundedZoom);
   if (pageZoomValue) pageZoomValue.value = `${boundedZoom}%`;
   localStorage.setItem("fabula-page-zoom", String(boundedZoom));
@@ -179,6 +202,7 @@ setPageZoom(initialPageZoom);
 pageZoomInput?.addEventListener("input", () => setPageZoom(Number(pageZoomInput.value)));
 
 const map = new WorldMap(mapRoot, (id) => state.select(id));
+const starfieldMap = new WorldMap(mapDialogRoot, (id) => state.select(id));
 const panel = new CountryPanel(panelRoot, travelRoot, (id) => state.select(id), (id) => state.setDeparture(id));
 const timeline = new Timeline(timelineRoot, (day) => state.setDay(day), (id) => {
   setPageView("map");
@@ -190,7 +214,15 @@ new MapControls(controlsRoot, {
   zoomOut: () => state.setZoom(state.snapshot.zoom - 0.1),
   reset: () => state.setZoom(1),
   toggleMotion: (enabled) => document.body.classList.toggle("reduce-motion", !enabled),
-  toggleMobius: (enabled) => state.setMobiusVisible(enabled)
+  toggleMobius: (enabled) => state.setMobiusVisible(enabled),
+  showStarfield: () => {
+    sizeMapDialog();
+    mapDialog.showModal();
+  }
+});
+window.addEventListener("resize", sizeMapDialog);
+mapDialog.addEventListener("click", (event) => {
+  if (event.target === mapDialog) mapDialog.close();
 });
 
 new FateClockMonitor(fateClockRoot);
@@ -200,6 +232,7 @@ new PeopleMonitor(peopleRoot);
 
 state.subscribe((snapshot) => {
   map.render(snapshot);
+  starfieldMap.render(snapshot);
   panel.render(snapshot.selectedId, snapshot.day, snapshot.departureId);
   timeline.render(snapshot);
   const activeEvent = [...events].reverse().find((event) => event.day <= snapshot.day);

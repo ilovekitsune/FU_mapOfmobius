@@ -44,6 +44,7 @@ export interface SkyIsland {
   y: number;
   size: number;
   movement: "drifting" | "anchored";
+  orbitPeriodDays?: number;
   dungeon?: string;
   description: string;
   phase: number;

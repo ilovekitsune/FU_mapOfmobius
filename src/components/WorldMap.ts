@@ -3,6 +3,8 @@ import { getContinentPosition, getUpcomingMeeting } from "../systems/MobiusSyste
 import { getIslandPosition } from "../systems/IslandMovement";
 import type { WorldStateSnapshot } from "../systems/WorldState";
 
+let mapInstanceCount = 0;
+
 const landShape = (
   x: number,
   y: number,
@@ -56,6 +58,8 @@ const landShape = (
 };
 
 export class WorldMap {
+  private readonly mapId = `world-map-${++mapInstanceCount}`;
+
   constructor(private root: HTMLElement, private onSelect: (id: string) => void) {}
 
   render(state: WorldStateSnapshot): void {
@@ -112,47 +116,57 @@ export class WorldMap {
       });
     }).join("");
 
+    const { centerX, centerY, radiusX, radiusY } = settings.orbit;
+    const left = centerX - radiusX;
+    const right = centerX + radiusX;
+    const upper = centerY - radiusY * 0.88;
+    const lower = centerY + radiusY * 0.88;
+    const innerControl = centerX + radiusX * 0.244;
+    const outerControl = centerX - radiusX * 0.244;
+    const orbitPath = `M ${centerX} ${centerY} C ${innerControl} ${upper} ${right} ${upper} ${right} ${centerY} C ${right} ${lower} ${innerControl} ${lower} ${centerX} ${centerY} C ${outerControl} ${upper} ${left} ${upper} ${left} ${centerY} C ${left} ${lower} ${outerControl} ${lower} ${centerX} ${centerY}`;
+    const orbitDirectionPath = settings.orbit.direction === 1
+      ? `M ${centerX} ${centerY} C ${innerControl} ${upper} ${right} ${upper} ${right} ${centerY}`
+      : `M ${centerX} ${centerY} C ${outerControl} ${lower} ${left} ${lower} ${left} ${centerY}`;
+
     this.root.innerHTML = `
-      <svg class="world-svg" viewBox="0 0 1200 760" style="transform:scale(${state.zoom});transform-origin:center center" role="img" aria-label="莫比烏斯之環上的世界地圖">
+      <svg class="world-svg" viewBox="0 0 1200 760" style="transform:scale(${state.zoom});transform-origin:center center" role="img" aria-label="莫比烏斯∞軌道上的星域地圖">
         <defs>
-          <radialGradient id="voidGlow">
+          <radialGradient id="${this.mapId}-void-glow">
             <stop offset="0%" stop-color="#dc4d9f" stop-opacity=".22" />
             <stop offset="70%" stop-color="#8c367f" stop-opacity=".08" />
             <stop offset="100%" stop-color="#17111c" stop-opacity="0" />
           </radialGradient>
-          <linearGradient id="mobiusBand" x1="0%" y1="0%" x2="100%" y2="0%">
+          <linearGradient id="${this.mapId}-mobius-band" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stop-color="#f08ac6" />
             <stop offset="30%" stop-color="#744476" />
             <stop offset="52%" stop-color="#382542" />
             <stop offset="76%" stop-color="#a64d87" />
             <stop offset="100%" stop-color="#f08ac6" />
           </linearGradient>
-          <marker id="orbitArrow" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+          <marker id="${this.mapId}-orbit-arrow" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
             <path d="M 0 0 L 8 5 L 0 10 Z" fill="#ffd2ed" />
           </marker>
-          <pattern id="starGrid" width="83" height="79" patternUnits="userSpaceOnUse">
+          <pattern id="${this.mapId}-star-grid" width="83" height="79" patternUnits="userSpaceOnUse">
             <circle cx="12" cy="18" r="1" fill="#ffe4f5" opacity=".34" />
             <circle cx="63" cy="49" r=".8" fill="#ed75b7" opacity=".42" />
           </pattern>
-          <filter id="pinkBlur"><feGaussianBlur stdDeviation="9" /></filter>
-          <filter id="bandGlow" x="-30%" y="-30%" width="160%" height="160%">
+          <filter id="${this.mapId}-pink-blur"><feGaussianBlur stdDeviation="9" /></filter>
+          <filter id="${this.mapId}-band-glow" x="-30%" y="-30%" width="160%" height="160%">
             <feGaussianBlur stdDeviation="9" />
           </filter>
         </defs>
-        <rect width="1200" height="760" fill="url(#starGrid)" />
-        <ellipse class="void-glow" cx="600" cy="403" rx="265" ry="248" fill="url(#voidGlow)" />
-        <g class="mobius-band ${state.mobiusVisible ? "" : "is-hidden"}" aria-label="莫比烏斯環形軌道">
-          <ellipse class="band-halo" cx="${settings.orbit.centerX}" cy="${settings.orbit.centerY}" rx="${settings.orbit.radiusX}" ry="${settings.orbit.radiusY}" />
-          <ellipse class="band-ribbon" cx="${settings.orbit.centerX}" cy="${settings.orbit.centerY}" rx="${settings.orbit.radiusX}" ry="${settings.orbit.radiusY}" />
-          <ellipse class="band-edge" cx="${settings.orbit.centerX}" cy="${settings.orbit.centerY}" rx="${settings.orbit.radiusX}" ry="${settings.orbit.radiusY}" />
-          <path class="orbit-direction" marker-end="url(#orbitArrow)" d="${settings.orbit.direction === 1
-            ? `M ${settings.orbit.centerX + settings.orbit.radiusX * 0.56} ${settings.orbit.centerY - settings.orbit.radiusY * 0.83} A ${settings.orbit.radiusX} ${settings.orbit.radiusY} 0 0 1 ${settings.orbit.centerX + settings.orbit.radiusX * 0.83} ${settings.orbit.centerY - settings.orbit.radiusY * 0.56}`
-            : `M ${settings.orbit.centerX + settings.orbit.radiusX * 0.83} ${settings.orbit.centerY - settings.orbit.radiusY * 0.56} A ${settings.orbit.radiusX} ${settings.orbit.radiusY} 0 0 0 ${settings.orbit.centerX + settings.orbit.radiusX * 0.56} ${settings.orbit.centerY - settings.orbit.radiusY * 0.83}`}" />
-          <path class="band-twist-seam" d="M 600 114 L 600 166" />
-          <text class="band-label" x="600" y="89">莫比烏斯之環</text>
-          <text class="band-label-en" x="600" y="104">大陸依各自週期環行 · 順箭頭方向</text>
+        <rect width="1200" height="760" fill="url(#${this.mapId}-star-grid)" />
+        <ellipse class="void-glow" cx="600" cy="403" rx="265" ry="248" fill="url(#${this.mapId}-void-glow)" />
+        <g class="mobius-band ${state.mobiusVisible ? "" : "is-hidden"}" aria-label="莫比烏斯∞形移動軌道">
+          <path class="band-halo" style="filter:url(#${this.mapId}-band-glow)" d="${orbitPath}" />
+          <path class="band-ribbon" style="stroke:url(#${this.mapId}-mobius-band)" d="${orbitPath}" />
+          <path class="band-edge" d="${orbitPath}" />
+          <path class="orbit-direction" marker-end="url(#${this.mapId}-orbit-arrow)" d="${orbitDirectionPath}" />
+          <path class="band-twist-seam" d="M ${centerX - 20} ${centerY - 8} Q ${centerX} ${centerY} ${centerX + 20} ${centerY + 8}" />
+          <text class="band-label" x="${centerX + radiusX * 0.51}" y="${centerY - radiusY * 0.9}">莫比烏斯之環</text>
+          <text class="band-label-en" x="${centerX + radiusX * 0.51}" y="${centerY - radiusY * 0.83}">大陸沿∞形曲線環行 · 中央交會</text>
         </g>
-        <path class="void-current" d="M 438 262 Q 585 320 668 394 T 792 536" />
+        <path class="void-current" style="filter:url(#${this.mapId}-pink-blur)" d="M 438 262 Q 585 320 668 394 T 792 536" />
         <text class="void-label" x="602" y="426">虛 空 海</text>
         <text class="void-caption" x="602" y="448">THE LUMINOUS VOID</text>
         ${continentMarkup}
