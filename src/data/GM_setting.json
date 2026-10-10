@@ -1,6 +1,6 @@
 [
 {
-    "GM_mode": true,
+    "GM_mode": false,
     "GM_mode_name": "GM模式",
     "GM_mode_description": "開啟後，將會顯示所有地圖上的設定資訊，並且可以使用GM模式的功能。",
     "GM_mode_warning": "GM模式僅供遊戲主持人使用，請勿在公開場合開啟。"

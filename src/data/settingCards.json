@@ -1,27 +1,27 @@
 [
   {
     "eyebrow": "主線故事",
-    "title": "審訊",
+    "title": "前往下層",
     "className": "prologue-card",
     "paragraphs": [
       {
-        "text": "審訊是旅人們的第一個任務，審訊的結果將決定旅人們的命運。"
+        "text": "調查這些技術發展的具體原因，以及最重要的，是否有外部勢力的干涉。"
       },
       {
-        "text": "被中層防衛軍逮捕的旅人們，該如何脫身呢?",
+        "text": "下層究竟有什麼等待著旅人們呢?",
         "emphasis": true
       }
     ]
   },{
     "eyebrow": "支線故事",
-    "title": "未接取支線任務",
+    "title": "找尋閃光原因",
     "className": "prologue-card",
     "paragraphs": [
       {
-        "text": "無"
+        "text": "襲擊我們乘坐飛艇的一到神祕閃光，究竟是什麼原因造成的呢?"
       },
       {
-        "text": "未接取支線任務，請前往各地探索。",
+        "text": "或許有機會在下層找到蛛絲馬跡，能發現閃光來源就能知道飛艇墜毀的原因。",
         "emphasis": true
       }
     ]
