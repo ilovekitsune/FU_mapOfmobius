@@ -144,7 +144,7 @@
       "orbitAngle": 145,
       "movement": "drifting",
       "countryIds": ["valcell-country"],
-      "description": "位於莫比烏斯環南段的漂流大陸，其中比較知名的國家是瓦爾瑟爾帝國，是地下城討法公會的發源地。",
+      "description": "位於莫比烏斯環南段的漂流大陸，其中比較知名的國家是瓦爾瑟爾帝國，是地下城討伐公會的發源地。",
       "meetings": [{ "day": 300, "mode": "edge" }]
     },
     {
