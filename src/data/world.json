@@ -98,17 +98,17 @@
     },
 
     {
-      "id": "north-fragment",
-      "name": "未知大陸1",
-      "subtitle": "國度與傳聞，留待旅人書寫",
+      "id": "okurnova-fragment",
+      "name": "奧卡爾諾瓦",
+      "subtitle": "學院都市",
       "shape": "rectangle",
-      "width": 100,
-      "height": 100,
+      "width": 30,
+      "height": 30,
       "rotation": 9,
       "orbitAngle": 68,
       "movement": "drifting",
-      "countryIds": [],
-      "description": "漂流在莫比烏斯環北段的破碎大陸，將於第八旅行日與艾倫布萊德在環內上下交會。",
+      "countryIds": ["okurnova-country"],
+      "description": "漂流在莫比烏斯環北段的破碎大陸，其中最有名的是創造和研究魔偶的魔法都市奧卡爾諾瓦",
       "meetings": [
         { "day": 8, "mode": "inner" },
         {
@@ -129,22 +129,22 @@
       "orbitAngle": 300,
       "movement": "drifting",
       "orbitPeriodDays": 305,
-      "countryIds": [ "semikaiyara_country" ],
-      "description": "無名的圓形大陸，上方似乎有著許多的王國與城市，其中人族與精靈族交織的聖米凱亞拉國最有名。",
+      "countryIds": ["semikaiyara_country"],
+      "description": "圓形大陸，上方似乎有著許多的王國與城市，其中人族與精靈族交織的聖米凱亞拉國最有名。",
       "meetings": [{ "day": 19, "mode": "edge" }]
     },
     {
-      "id": "unknown-fragment1",
-      "name": "未知大陸2",
-      "subtitle": "尚未命名的遠方",
+      "id": "valcell-fragment",
+      "name": "瓦爾瑟爾大陸",
+      "subtitle": "勇氣之牢",
       "shape": "irregular",
-      "width": 150,
-      "height": 153,
+      "width": 120,
+      "height": 100,
       "rotation": 7,
       "orbitAngle": 145,
       "movement": "drifting",
-      "countryIds": [],
-      "description": "位於莫比烏斯環南段的漂流大陸，旅行者們還未知曉其存在。步行通路只會在大陸實際相接時出現；",
+      "countryIds": ["valcell-country"],
+      "description": "位於莫比烏斯環南段的漂流大陸，其中比較知名的國家是瓦爾瑟爾帝國，是地下城討法公會的發源地。",
       "meetings": [{ "day": 300, "mode": "edge" }]
     },
     {
@@ -276,8 +276,10 @@
       "capital": "????",
       "description": "聖米凱亞拉國位於一個圓形的大陸上，它雖然是那片大陸上主要的國家，但並不是唯一的國家。",
       "color": "#99E6FF",
-      "details": [{ "label": "主要種族", "value": "主要種族是人族與精靈族" },
-        { "label": "未知", "value": "其他細節仍然未知。" }]
+      "details": [
+        { "label": "主要種族", "value": "主要種族是人族與精靈族" },
+        { "label": "未知", "value": "其他細節仍然未知。" }
+      ]
     },
     {
       "id": "hollow-nest-country",
@@ -306,6 +308,58 @@
           "value": "聖巢王國的頂尖魔法技術高度壟斷在王宮內，從使役元素精靈、製作永久自動化封印或守護符文到改造居住環境等都能辦到；"
         },
         { "label": "未知", "value": "其他細節仍然未知。" }
+      ]
+    },
+    {
+      "id": "okurnova-country",
+      "name": "奧卡爾諾瓦",
+      "continentId": "okurnova-fragment",
+      "motto": "乙太引擎哥雷姆為您服務。",
+      "status": "繁榮",
+      "capital": "奧卡爾諾瓦",
+      "description": "盛產魔法科技造物的國家，擁有世界上最先進的魔法科技與魔偶製作技術。",
+      "color": "#99E6FF",
+      "details": [
+        {
+          "label": "魔偶研究學院",
+          "value": "舊魔法世界便存在的魔偶研究學院，發展到後期學院規模龐大到已然成為國家。"
+        },
+        {
+          "label": "學院都市",
+          "value": "整個國家都是一個學院都市，居民大多是魔偶研究學院的學生、研究員與相關產業的工作者。"
+        },
+        {
+          "label": "傳說曾參加過神戰",
+          "value": "在神戰時期提供大量魔偶士兵來減少人類傷亡，增加了不少聲望。"
+        },
+        {
+          "label": "有傳言整座都市都是實驗室",
+          "value": "實際上魔法都市是為了收集魔偶心智成長和機體性能數據的一場大型實驗。"
+        }
+      ]
+    },
+    {
+      "id": "valcell-country",
+      "name": "瓦爾瑟爾帝國",
+      "continentId": "valcell-fragment",
+      "motto": "勇氣與榮譽，為了國家而戰。",
+      "status": "繁榮",
+      "capital": "瓦爾瑟爾城",
+      "description": "瓦爾瑟爾是一個位於莫比烏斯環南段的漂流大陸上的國家，以勇氣和榮譽為核心價值觀，擁有強大的軍事力量和豐富的文化遺產。",
+      "color": "#FF6B8B",
+      "details": [
+        {
+          "label": "組成",
+          "value": "瓦爾瑟爾帝國為有貴族、學者、商人、人民、奴隸的國家，高度使用法術，有機械輔助。"
+        },
+        {
+          "label": "討伐地下城公會",
+          "value": "是討伐地下城公會的主要建立與管理國家，在其他友邦有分部。"
+        },
+        {
+          "label": "異世界人",
+          "value": "不過不少本地人歧視異世界人，風俗民情都有不同的差異，有認為移民太多導致混亂的一派，被召喚的人回去的方式被隱瞞，直到這個世界的地下城問題被解決。異世界人會發一個銅級公會徽章跟500元。"
+        }
       ]
     }
   ],
@@ -364,7 +418,8 @@
       "description": "MS 399 年，命運引領著旅人抵達於此。",
       "locationId": "iron-blood",
       "type": "story"
-    },{
+    },
+    {
       "day": 1,
       "title": "中層防衛軍的逮捕了，迫降於艾倫布萊德的走私犯人",
       "description": "迫降於艾倫布萊德的走私犯人，因為未聯絡接港且飛艇為黑戶並破壞了眾多中層設施而被中層防衛軍逮捕。",
