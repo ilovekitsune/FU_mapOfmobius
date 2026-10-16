@@ -65,32 +65,42 @@
       "status": "未知",
       "affiliation": "未知",
       "relationship": "迫降時短暫交集",
-      "latestMove": "艾倫布萊德 中段 12–22 層",
+      "latestMove": "艾倫布萊德 塔底 23–33 層",
       "originPlace": "艾倫布萊德",
       "description": "未知"
     }, {
-      "id": "unknown2",
-      "name": "尚未鎖定該人物",
-      "avatar": "/assets/characters/unknown_s.png",
-      "role": "未知",
+      "id": "siri",
+      "name": "希里",
+      "avatar": "/assets/characters/siri.png",
+      "role": "爐心會的協助者",
       "fate": "未知",
-      "status": "未知",
-      "affiliation": "未知",
-      "relationship": "未知",
+      "status": "存活",
+      "affiliation": "存活",
+      "relationship": "友方?",
       "latestMove": "艾倫布萊德 塔底 23–33 層",
-      "originPlace": "未知",
-      "description": "未知"
+      "originPlace": "艾倫布萊德",
+      "description": "爐心會的協助者，是否為成員尚未知。 曾經與艾恩機械性的『握手』過，但本人似乎毫無察覺。"
     }, {
-      "id": "unknown3",
-      "name": "尚未鎖定該人物",
-      "avatar": "/assets/characters/unknown_s.png",
-      "role": "未知",
-      "fate": "未知",
-      "status": "未知",
-      "affiliation": "未知",
-      "relationship": "未知",
+      "id": "gigi",
+      "name": "茲茲",
+      "avatar": "/assets/characters/gigi.png",
+      "role": "情報商",
+      "status": "存活",
+      "affiliation": "微弱",
+      "relationship": "友方",
       "latestMove": "艾倫布萊德 塔底 23–33 層",
-      "originPlace": "未知",
-      "description": "未知"
+      "originPlace": "艾倫布萊德",
+      "description": "艾倫布萊德 塔底 23層 的螢光黑市情報商隸屬於【黑水幫】，相當注重商譽。是「鼠道」外送服務的統領人。"
+    }, {
+      "id": "rari",
+      "name": "拉里",
+      "avatar": "/assets/characters/rari.png",
+      "role": "爐心會成員",
+      "status": "生死不明",
+      "affiliation": "微弱",
+      "relationship": "友方?",
+      "latestMove": "艾倫布萊德 塔底 23–33 層",
+      "originPlace": "艾倫布萊德",
+      "description": "電梯前的小男孩，在與你們道別後消失在神秘的管道內。 母親很著急地尋找著他。"
     }]
 }
