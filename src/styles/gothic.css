@@ -296,9 +296,14 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .document-unlocked[hidden] { display: none; }
 .document-unlocked > header h2 { margin: 0; color: #fff0fa; font: 700 23px/1.4 var(--serif); }
 .document-unlocked > header h3 { margin: 7px 0 0; color: #f0a7d0; font-size: 14px; line-height: 1.8; }
-.document-unlocked-news { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; margin-top: 13px; }
+.document-unlocked-content { display: grid; gap: 13px; margin-top: 13px; }
+.document-unlocked-section { padding: 15px 16px; border: 1px solid rgba(236,194,224,.1); background: rgba(255,255,255,.02); }
+.document-unlocked-section > h3 { margin: 0 0 9px; color: #f0a7d0; font: 700 16px/1.4 var(--serif); }
+.document-unlocked-field { margin: 5px 0 0; color: #d0c4d2; font-size: 12px; line-height: 1.85; overflow-wrap: anywhere; }
+.document-unlocked-field strong { color: #f0d7e9; }
+.document-unlocked-news { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
 .document-unlocked-entry { padding: 13px 0; border-top: 1px solid rgba(236,194,224,.1); }
-.document-unlocked-entry h3 { margin: 0; color: #f0a7d0; font-size: 12px; }
+.document-unlocked-entry h4 { margin: 0; color: #f0a7d0; font-size: 12px; line-height: 1.7; }
 .document-unlocked-entry p { margin: 6px 0 0; color: #d0c4d2; font-size: 12px; line-height: 1.9; overflow-wrap: anywhere; }
 .document-unlock-logout { margin-top: 12px; }
 .people-intro-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
