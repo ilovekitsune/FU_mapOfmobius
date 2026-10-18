@@ -276,6 +276,31 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .history-date { color: #f0a7d0; font-size: 10px; font-weight: 700; letter-spacing: .03em; padding-top: 2px; }
 .history-entry h3 { margin: 0; color: #f2e7f2; font-size: 12px; font-weight: 700; }
 .history-entry p { margin: 4px 0 0; color: #c1b5c4; font-size: 11px; font-weight: 500; line-height: 1.8; }
+.document-unlock-card { margin-top: 15px; padding: 22px 24px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(31,24,35,.9), rgba(20,16,24,.92)); }
+.document-unlock-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.document-unlock-heading h2 { margin: 5px 0; color: #fff0fa; font: 700 21px/1.35 var(--serif); }
+.document-unlock-heading p { margin: 0; color: #c7bdca; font-size: 12px; line-height: 1.8; }
+.document-unlock-badge { padding: 5px 9px; border: 1px solid rgba(230,161,111,.35); color: #e6b48b; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.document-unlock-warning { margin: 16px 0; padding: 10px 12px; border-left: 2px solid #e6a16f; background: rgba(230,161,111,.06); color: #d4b9a5; font-size: 11px; line-height: 1.8; }
+.document-unlock-form { display: grid; gap: 13px; }
+.document-unlock-field { display: flex; min-width: 0; flex-direction: column; gap: 6px; color: #eaddea; font-size: 11px; font-weight: 700; }
+.document-unlock-field input, .document-unlock-field textarea { width: 100%; min-height: 38px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 0; background: rgba(10,8,13,.55); color: #f3eaf2; font-size: 12px; font-weight: 500; }
+.document-unlock-field textarea { min-height: 94px; resize: vertical; font-family: ui-monospace, Consolas, monospace; font-size: 11px; overflow-wrap: anywhere; }
+.document-unlock-field input::placeholder, .document-unlock-field textarea::placeholder { color: #897b8d; }
+.document-unlock-credentials { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+.document-unlock-actions { display: flex; align-items: center; gap: 13px; }
+.document-unlock-submit, .document-unlock-logout { min-height: 36px; padding: 0 13px; border: 1px solid rgba(237,117,183,.4); background: rgba(237,117,183,.1); color: var(--pink-bright); font-size: 11px; font-weight: 700; cursor: pointer; }
+.document-unlock-submit:hover, .document-unlock-logout:hover { border-color: var(--pink-bright); background: rgba(237,117,183,.18); }
+.document-unlock-status { margin: 0; color: #c7bdca; font-size: 11px; line-height: 1.7; }
+.document-unlocked { margin-top: 21px; padding-top: 19px; border-top: 1px solid var(--line); }
+.document-unlocked[hidden] { display: none; }
+.document-unlocked > header h2 { margin: 0; color: #fff0fa; font: 700 23px/1.4 var(--serif); }
+.document-unlocked > header h3 { margin: 7px 0 0; color: #f0a7d0; font-size: 14px; line-height: 1.8; }
+.document-unlocked-news { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; margin-top: 13px; }
+.document-unlocked-entry { padding: 13px 0; border-top: 1px solid rgba(236,194,224,.1); }
+.document-unlocked-entry h3 { margin: 0; color: #f0a7d0; font-size: 12px; }
+.document-unlocked-entry p { margin: 6px 0 0; color: #d0c4d2; font-size: 12px; line-height: 1.9; overflow-wrap: anywhere; }
+.document-unlock-logout { margin-top: 12px; }
 .people-intro-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
 .people-section-card, .fate-clock-status, .fate-clock-card { border: 1px solid var(--line); background: linear-gradient(145deg, rgba(31,24,35,.9), rgba(20,16,24,.92)); }
 .people-section-card { padding: 24px; }
@@ -374,6 +399,10 @@ body.reduce-motion *, body.reduce-motion *::before, body.reduce-motion *::after 
   .next-event { display: none; }
   .event-location { align-self: center; }
   .history-card { padding: 17px 14px; }
+  .document-unlock-card { padding: 18px 14px; }
+  .document-unlock-heading { flex-direction: column; gap: 10px; }
+  .document-unlock-credentials, .document-unlocked-news { grid-template-columns: 1fr; }
+  .document-unlock-actions { align-items: flex-start; flex-direction: column; }
   .history-list { grid-template-columns: 1fr; }
   .footer-note { gap: 12px; flex-direction: column; }
   .map-legend { right: 11px; bottom: 12px; gap: 9px; font-size: 10px; }

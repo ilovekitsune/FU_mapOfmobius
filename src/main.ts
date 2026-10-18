@@ -1,4 +1,5 @@
 import { CountryPanel } from "./components/CountryPanel";
+import { DocumentUnlock } from "./components/DocumentUnlock";
 import { FateClockMonitor } from "./components/FateClockMonitor";
 import { MapControls } from "./components/MapControls";
 import { PeopleMonitor } from "./components/PeopleMonitor";
@@ -86,6 +87,7 @@ root.innerHTML = `
             `).join("")}
           </div>
         </section>
+        <section class="document-unlock-root" aria-label="機密文件解鎖"></section>
       </section>
       <section class="page-view" id="people-page" data-page-view="people" aria-label="命定之人監控" hidden>
         <div class="intro-row">
@@ -127,7 +129,8 @@ const worldLogPage = root.querySelector<HTMLElement>("#world-log-page");
 const pageViews = [...root.querySelectorAll<HTMLElement>("[data-page-view]")];
 const pageViewButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-view-target]")];
 const fateClockRoot = root.querySelector<HTMLElement>(".fate-clock-grid");
-if (!mapRoot || !panelRoot || !travelRoot || !timelineRoot || !controlsRoot || !mapDialog || !mapDialogRoot || !mapDialogCard || !mapPage || !worldLogPage || !fateClockRoot || pageViews.length !== pageViewButtons.length) {
+const documentUnlockRoot = root.querySelector<HTMLElement>(".document-unlock-root");
+if (!mapRoot || !panelRoot || !travelRoot || !timelineRoot || !controlsRoot || !mapDialog || !mapDialogRoot || !mapDialogCard || !mapPage || !worldLogPage || !fateClockRoot || !documentUnlockRoot || pageViews.length !== pageViewButtons.length) {
   throw new Error("A required application region is missing.");
 }
 
@@ -226,6 +229,7 @@ mapDialog.addEventListener("click", (event) => {
 });
 
 new FateClockMonitor(fateClockRoot);
+new DocumentUnlock(documentUnlockRoot);
 const peopleRoot = root.querySelector<HTMLElement>(".people-intro-grid");
 if (!peopleRoot) throw new Error("People monitor region is missing.");
 new PeopleMonitor(peopleRoot);
