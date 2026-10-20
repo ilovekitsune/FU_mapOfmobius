@@ -3,26 +3,20 @@
     "id": "ironblood4",
     "title": "革命的鐘聲",
     "total": 16,
-    "initialValue": 2,
+    "initialValue": 4,
     "description": "【爐心會】的命刻，代表著下層人民的信念與意志以及下次針對中層反撲的行動時刻。"
-  },{
-    "id": "ironblood5",
-    "title": "神隱少年拉里",
-    "total": 16,
-    "initialValue": 1,
-    "description": "【拉里】的命刻，代表著他命定結局到來的時刻。"
   },
   {
-    "id": "unknown3",
-    "title": "未知命刻",
+    "id": "ironblood6",
+    "title": "【反派命刻】艾倫布萊德的墜落",
     "total": 24,
-    "initialValue": 4,
-    "description": "未知的命刻，尚未被定義。"
+    "initialValue": 6,
+    "description": "某位存在運用陰謀促成艾倫布萊德的墜落"
   },{
     "id": "unknown2",
     "title": "未知命刻",
     "total": 48,
-    "initialValue": 3,
+    "initialValue": 5,
     "description": "此命刻或許與黑肺病晚期的成因，以及魔豆食品有關。"
   }
 ]
