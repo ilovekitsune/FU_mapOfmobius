@@ -27,7 +27,7 @@ root.innerHTML = `
       </nav>
       <div class="topbar-right">
        <span class="world-status system-status"><i class="status-dot"></i>系統狀態：正常</span>
-       <span class="world-status"><i class="status-dot"></i>女武神狀態 :失聯        </span>
+       <span class="world-status system-status"><i class="status-dot"></i>女武神狀態 :連線中        </span>
         <span class="world-status"><i class="status-dot"></i>世界狀態 :未知        </span>
         <label class="page-zoom-control" for="page-zoom">
           <span>頁面大小</span>
