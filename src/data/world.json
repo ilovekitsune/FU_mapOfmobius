@@ -427,6 +427,20 @@
       "type": "story"
     },
     {
+      "day": 4,
+      "title": "【交會日前夜祭】",
+      "description": "中層即將舉辦【交會日前夜祭】聽說上層的貴族與議會長的女兒會共襄盛舉。",
+      "locationId": "iron-blood",
+      "type": "story"
+    },
+    {
+      "day": 8,
+      "title": "艾倫布萊德交會日",
+      "description": "艾倫布萊德將與奧卡爾諾瓦環內交會。",
+      "locationId": "iron-blood",
+      "type": "story"
+    },
+    {
       "day": 365,
       "title": "一年的結束",
       "description": "旅人相遇一周年。",
