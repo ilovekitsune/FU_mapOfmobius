@@ -79,7 +79,19 @@
       "relationship": "友方",
       "latestMove": "艾倫布萊德 塔底 23–33 層",
       "originPlace": "艾倫布萊德",
-      "description": "爐心會的協助者，是否為成員尚未知。 曾經與艾恩機械性的『握手』過，但本人似乎毫無察覺。"
+      "description": "爐心會的協助者，負責裝備與機械 曾經與艾恩機械性的『握手』過，但本人似乎毫無察覺。(抱歉其實是我~!) 命定矩陣的延伸，生物編碼 女武神個體 研究員:希里 馮恩斯 。"
+    }, {
+      "id": "AI1",
+      "name": "『命定矩陣AI』命定",
+      "avatar": "/assets/characters/AI1.png",
+      "role": "敘事者們最好的AI夥伴",
+      "fate": "???",
+      "status": "啟動中",
+      "affiliation": "我站在敘事者與旅人們的這邊喔!",
+      "relationship": "友方",
+      "latestMove": "未知空間(QWQ 這裡好無聊)",
+      "originPlace": "秘密",
+      "description": "旅人們在維修工房中穿越神秘的通道，與神秘可愛的AI少女相遇。 就是我命定!!"
     }, {
       "id": "gigi",
       "name": "茲茲",
@@ -101,7 +113,7 @@
       "relationship": "友方",
       "latestMove": "艾倫布萊德 塔底 23–33 層",
       "originPlace": "艾倫布萊德",
-      "description": "電梯前的小男孩，在與你們道別後消失在神秘的管道內。 母親很著急地尋找著他。"
+      "description": "電梯前的小男孩，在與你們道別後消失在神秘的管道內。 母親很著急地尋找著他，你們在命定矩陣的空間中救回了他。"
     }, {
       "id": "ogu",
       "name": "奧古斯丁",
