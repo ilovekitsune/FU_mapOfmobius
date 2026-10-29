@@ -10,13 +10,13 @@
     "id": "ironblood6",
     "title": "【反派命刻】艾倫布萊德的墜落",
     "total": 24,
-    "initialValue": 7,
+    "initialValue": 8,
     "description": "某位存在運用陰謀促成艾倫布萊德的墜落"
   },{
     "id": "unknown2",
     "title": "未知命刻",
     "total": 48,
-    "initialValue": 6,
+    "initialValue": 7,
     "description": "此命刻或許與黑肺病晚期的成因，以及魔豆食品有關。"
   }
 ]

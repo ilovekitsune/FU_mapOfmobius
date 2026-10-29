@@ -129,12 +129,23 @@
       "id": "ier",
       "name": "愛兒",
       "avatar": "/assets/characters/ier.png",
-      "role": "爐心會參謀",
+      "role": "爐心會參謀/上議會議長女兒 賀夫帕夫的家主",
       "status": "存活",
-      "affiliation": "爐心會",
+      "affiliation": "爐心會/上層貴族",
       "relationship": "友方",
       "latestMove": "艾倫布萊德 塔底 23–33 層",
       "originPlace": "艾倫布萊德",
-      "description": "爐心會參謀，個性有點古靈精怪。她曾經生活在高汙染地區，父母都變成了攝取者，髮色好像也是因為意外而變成的。"
+      "description": "爐心會參謀，個性有點古靈精怪。她曾經生活在高汙染地區，父母都變成了攝取者，髮色好像也是因為意外而變成的。與枯葉到中層約會後被以諾揭穿身分為【愛麗兒 馮 賀夫帕夫】"
+    }, {
+      "id": "ino",
+      "name": "大副 以諾",
+      "avatar": "/assets/characters/ino.png",
+      "role": "未知",
+      "status": "未知",
+      "affiliation": "未知",
+      "relationship": "反派",
+      "latestMove": "未知",
+      "originPlace": "艾倫布萊德",
+      "description": "未知。"
     }]
 }

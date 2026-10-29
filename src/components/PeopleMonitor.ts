@@ -41,6 +41,7 @@ const profileCard = (person: PersonProfile): string => {
   const name = escapeHtml(person.name);
   const avatar = person.avatar ? escapeHtml(resolveAvatarUrl(person.avatar)) : "";
   const fallback = escapeHtml(person.name.slice(0, 2) || "✦");
+  const isVillain = person.relationship === "反派";
   const fields: [string, string | undefined][] = [
     ["起源之地", person.originPlace],
     ["身分", person.role],
@@ -59,12 +60,13 @@ const profileCard = (person: PersonProfile): string => {
     : "";
 
   return `
-    <article class="person-card" data-person-id="${escapeHtml(person.id)}">
+    <article class="person-card${isVillain ? " is-villain" : ""}" data-person-id="${escapeHtml(person.id)}">
       <div class="person-avatar${avatar ? "" : " is-missing"}" aria-label="${name}頭像">
         ${avatar ? `<img src="${avatar}" alt="${name}的頭像" loading="lazy" />` : ""}
         <span aria-hidden="true">${fallback}</span>
       </div>
       <div class="person-card-copy">
+        ${isVillain ? '<span class="person-threat-label">⚠ 危險目標 · HOSTILE</span>' : ""}
         <h3>${name}</h3>
         ${details}${description}
       </div>
