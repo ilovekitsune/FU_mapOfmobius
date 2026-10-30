@@ -262,6 +262,10 @@ export class DocumentUnlock {
       const card = document.createElement("article");
       card.className = "document-unlocked-entry";
       card.append(makeTextElement("h4", `檔案 ${valueToText(file.index) || String(index + 1).padStart(2, "0")}｜${valueToText(file.title) || "未命名檔案"}`));
+      appendField(card, "檔案編號", file.id);
+      appendField(card, "分類", file.category);
+      appendField(card, "紀錄時間", file.time);
+      appendField(card, "紀錄性質", file.recordType);
       appendField(card, "解鎖條件", file.unlockCondition);
       const isUnlocked = file.unlocked === true || file.status === "已解封" || file.status === "unlocked";
       appendField(card, "檔案狀態", isUnlocked ? "已解封" : file.status || "封存");

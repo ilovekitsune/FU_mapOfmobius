@@ -304,7 +304,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .document-unlocked-news { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
 .document-unlocked-entry { padding: 13px 0; border-top: 1px solid rgba(236,194,224,.1); }
 .document-unlocked-entry h4 { margin: 0; color: #f0a7d0; font-size: 12px; line-height: 1.7; }
-.document-unlocked-entry p { margin: 6px 0 0; color: #d0c4d2; font-size: 12px; line-height: 1.9; overflow-wrap: anywhere; }
+.document-unlocked-entry p { margin: 6px 0 0; color: #d0c4d2; font-size: 12px; line-height: 1.9; overflow-wrap: anywhere; white-space: pre-line; }
 .document-unlock-logout { margin-top: 12px; }
 .people-intro-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
 .people-section-card, .fate-clock-status, .fate-clock-card { border: 1px solid var(--line); background: linear-gradient(145deg, rgba(31,24,35,.9), rgba(20,16,24,.92)); }
