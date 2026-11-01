@@ -10,13 +10,13 @@
     "id": "ironblood6",
     "title": "【反派命刻】艾倫布萊德的墜落",
     "total": 24,
-    "initialValue": 8,
+    "initialValue": 1,
     "description": "某位存在運用陰謀促成艾倫布萊德的墜落"
   },{
-    "id": "unknown2",
-    "title": "未知命刻",
+    "id": "ironblood7",
+    "title": "【反派命刻】未知儀式",
     "total": 48,
-    "initialValue": 7,
-    "description": "此命刻或許與黑肺病晚期的成因，以及魔豆食品有關。"
+    "initialValue": 2,
+    "description": "旅人們在核心鍋爐中發現黑肺病魔物化背後的存在似乎與什麼儀式有關，至於與魔豆食品有關的線索還需要尋找。"
   }
 ]
