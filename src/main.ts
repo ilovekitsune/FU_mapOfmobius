@@ -1,4 +1,5 @@
 import { CountryPanel } from "./components/CountryPanel";
+import { CardDraw } from "./components/CardDraw";
 import { DocumentUnlock } from "./components/DocumentUnlock";
 import { FateClockMonitor } from "./components/FateClockMonitor";
 import { MapControls } from "./components/MapControls";
@@ -24,6 +25,7 @@ root.innerHTML = `
         <button class="page-nav-button" type="button" data-view-target="log" aria-controls="world-log-page" aria-pressed="false">世界觀測LOG紀錄</button>
         <button class="page-nav-button" type="button" data-view-target="people" aria-controls="people-page" aria-pressed="false">命定之人監控</button>
         <button class="page-nav-button" type="button" data-view-target="fate-clock" aria-controls="fate-clock-page" aria-pressed="false">命刻監測系統</button>
+        <button class="page-nav-button" type="button" data-view-target="card-draw" aria-controls="card-draw-page" aria-pressed="false">命運抽牌</button>
       </nav>
       <div class="topbar-right">
        <span class="world-status system-status"><i class="status-dot"></i>系統狀態：正常</span>
@@ -107,6 +109,13 @@ root.innerHTML = `
         </section>
         <section class="fate-clock-grid" aria-label="命刻進度"></section>
       </section>
+      <section class="page-view" id="card-draw-page" data-page-view="card-draw" aria-label="命運抽牌" hidden>
+        <div class="intro-row">
+          <div><span class="eyebrow">FATE DRAW · RANDOM CARD READING</span><h1>命運<span>抽牌</span></h1></div>
+          <p class="intro-note">洗牌後隨機抽出五張牌，<br />每張牌都會顯示點數與花色。</p>
+        </div>
+        <section class="card-draw-root" aria-label="五張隨機撲克牌"></section>
+      </section>
       <footer class="footer-note">
         <span>✦ 傳說的盡頭，仍有人願意前行。</span>
         <span>虛空海會腐蝕固體 · 跨越請搭乘飛空艇或傳送法陣</span>
@@ -134,7 +143,7 @@ if (!mapRoot || !panelRoot || !travelRoot || !timelineRoot || !controlsRoot || !
   throw new Error("A required application region is missing.");
 }
 
-type PageView = "map" | "log" | "people" | "fate-clock";
+type PageView = "map" | "log" | "people" | "fate-clock" | "card-draw";
 let pageSwitchTimer: number | undefined;
 const setPageView = (view: PageView) => {
   const activePage = pageViews.find((page) => !page.hidden);
@@ -229,6 +238,9 @@ mapDialog.addEventListener("click", (event) => {
 });
 
 new FateClockMonitor(fateClockRoot);
+const cardDrawRoot = root.querySelector<HTMLElement>(".card-draw-root");
+if (!cardDrawRoot) throw new Error("Card draw region is missing.");
+new CardDraw(cardDrawRoot);
 new DocumentUnlock(documentUnlockRoot);
 const peopleRoot = root.querySelector<HTMLElement>(".people-intro-grid");
 if (!peopleRoot) throw new Error("People monitor region is missing.");

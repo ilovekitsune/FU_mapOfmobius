@@ -67,7 +67,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .page-view.is-entering > .history-card,
 .page-view.is-entering > .people-intro-grid,
 .page-view.is-entering > .fate-clock-status,
-.page-view.is-entering > .fate-clock-grid {
+.page-view.is-entering > .fate-clock-grid,
+.page-view.is-entering > .card-draw-root {
   animation: system-fade-in .48s cubic-bezier(.2,.75,.25,1) both;
 }
 .page-view.is-entering > .timeline-card,
@@ -80,7 +81,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .page-view.is-entering .setting-card,
 .page-view.is-entering .history-entry,
 .page-view.is-entering .people-section-card,
-.page-view.is-entering .fate-clock-card {
+.page-view.is-entering .fate-clock-card,
+.page-view.is-entering .playing-card {
   animation: system-fade-in .42s cubic-bezier(.2,.75,.25,1) both;
 }
 .page-view.is-entering .setting-card:nth-child(2),
@@ -363,6 +365,111 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .fate-clock-step:hover:not(:disabled) { border-color: var(--pink-bright); background: rgba(237,117,183,.14); }
 .fate-clock-step:disabled { opacity: .35; cursor: default; }
 .fate-clock-description { min-height: 42px; margin: 0; padding-top: 12px; border-top: 1px solid rgba(236,194,224,.1); color: #c7bdca; font-size: 12px; line-height: 1.8; }
+.card-draw-panel { display: grid; gap: 16px; padding: 22px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(31,24,35,.9), rgba(20,16,24,.92)); }
+.card-draw-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding-bottom: 18px; border-bottom: 1px solid rgba(236,194,224,.1); }
+.card-draw-toolbar h2 { margin: 6px 0 0; color: #fff0fa; font: 700 21px/1.3 var(--serif); }
+.card-game-actions { display: flex; gap: 9px; }
+.card-draw-button, .card-end-button { min-height: 42px; padding: 0 18px; border: 1px solid rgba(237,117,183,.55); background: linear-gradient(135deg, rgba(237,117,183,.2), rgba(143,91,127,.16)); color: #ffe4f3; font-size: 12px; font-weight: 800; letter-spacing: .03em; cursor: pointer; transition: background .2s ease, box-shadow .2s ease, transform .2s ease; }
+.card-end-button { border-color: rgba(236,194,224,.2); background: rgba(255,255,255,.025); color: #c7bdca; }
+.card-draw-button:hover { background: rgba(237,117,183,.28); box-shadow: 0 0 22px rgba(237,117,183,.17); transform: translateY(-1px); }
+.card-draw-button:active { transform: translateY(0); }
+.card-draw-button:disabled, .card-end-button:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+.card-game-settings { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; padding: 13px 15px; border: 1px solid rgba(236,194,224,.09); background: rgba(10,8,13,.22); }
+.card-game-settings label, .trap-action-row label, .skill-options-row label, .joker-assignment-row label { display: grid; gap: 5px; color: #d7c8d8; font-size: 11px; font-weight: 700; }
+.card-game-settings input, .trap-action-row select, .skill-options-row select, .skill-options-row input, .joker-assignment-row select { min-height: 33px; padding: 4px 8px; border: 1px solid rgba(236,194,224,.17); border-radius: 2px; background: #17131b; color: #f3eaf2; }
+.card-game-settings input { width: 105px; }
+.card-game-settings p { margin: 0 0 8px auto; color: #a99aab; font-size: 11px; }
+.card-game-settings p span { padding: 0 4px; color: #74586d; }
+.high-low-panel { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 13px 15px; border: 1px solid rgba(237,117,183,.2); background: linear-gradient(110deg, rgba(237,117,183,.07), rgba(10,8,13,.18)); }
+.high-low-panel h3 { margin: 3px 0 4px; color: #f3e6f1; font: 700 16px/1.35 var(--serif); }
+.high-low-panel > div:first-child > p, .high-low-discard > span { margin: 0; color: #b9abbc; font-size: 11px; line-height: 1.7; }
+.high-low-discard { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+.card-pile-row { display: grid; grid-template-columns: minmax(100px, .7fr) minmax(0, 3fr) minmax(100px, .7fr); gap: 13px; align-items: stretch; }
+.card-pile, .card-resolution, .trap-card-panel, .card-rules-reference, .card-battle-log { min-width: 0; padding: 16px; border: 1px solid rgba(236,194,224,.11); background: rgba(10,8,13,.2); }
+.card-pile > h3, .card-section-heading h3, .card-battle-log h3 { margin: 0; color: #f3e6f1; font: 700 16px/1.35 var(--serif); }
+.card-pile > h3 { margin-bottom: 14px; }
+.card-pile h3 span, .card-count-badge { margin-left: 5px; color: #b49aae; font: 600 10px "Noto Sans TC", sans-serif; }
+.card-pile-hand { display: flex; flex-direction: column; }
+.card-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
+.card-section-heading .eyebrow { display: block; margin-bottom: 4px; }
+.card-selection-count { color: #f0a7d0; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.playing-card-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 11px; align-items: start; justify-items: center; }
+.playing-card-grid-pending { grid-template-columns: repeat(5, minmax(0, 125px)); justify-content: start; }
+.playing-card { position: relative; display: grid; width: min(100%, 155px); aspect-ratio: 2.5 / 3.5; padding: 0; place-items: center; overflow: hidden; border: 1px solid rgba(245,224,237,.82); border-radius: 8px; background: linear-gradient(145deg, #fffdf9, #f1e8e9); box-shadow: 0 10px 20px rgba(0,0,0,.28), inset 0 0 0 4px rgba(255,255,255,.62); color: #241e28; cursor: pointer; animation: playing-card-deal .42s cubic-bezier(.2,.75,.25,1) both; animation-delay: calc(var(--card-index) * 70ms); transition: transform .18s ease, box-shadow .18s ease, outline-color .18s ease; }
+.playing-card:hover { z-index: 1; transform: translateY(-5px); box-shadow: 0 16px 25px rgba(0,0,0,.4), inset 0 0 0 4px rgba(255,255,255,.62); }
+.playing-card.is-selected { outline: 2px solid #ffa6d7; outline-offset: 3px; transform: translateY(-6px); box-shadow: 0 0 22px rgba(237,117,183,.3); }
+.playing-card[aria-pressed="false"] { color: inherit; }
+.playing-card.suit-black { color: #241e28; }
+.playing-card.suit-red { color: #c12e56; }
+.playing-card.suit-joker { color: #9c4a9d; background: linear-gradient(145deg, #fffdf9, #f4e5f4); }
+.playing-card::before { position: absolute; inset: 7px; border: 1px solid rgba(107,75,97,.15); border-radius: 5px; content: ""; pointer-events: none; }
+.playing-card-corner { position: absolute; z-index: 1; display: flex; align-items: center; flex-direction: column; font: 700 20px/.95 var(--serif); }
+.playing-card-corner span { margin-top: 3px; font: 700 16px/1 Arial, sans-serif; }
+.playing-card-corner-top { top: 15px; left: 15px; }
+.playing-card-corner-bottom { right: 15px; bottom: 15px; transform: rotate(180deg); }
+.playing-card-pips { display: grid; width: 61%; height: 66%; grid-template: repeat(5, 1fr) / repeat(3, 1fr); align-items: center; justify-items: center; }
+.playing-card-pip { font: 700 22px/1 Arial, sans-serif; }
+.playing-card-pip-ace { font-size: 76px; text-shadow: 0 2px 0 rgba(0,0,0,.08); }
+.playing-card-joker-mark { font: 76px/1 var(--serif); }
+.playing-card-joker-label { margin-top: 7px; font-size: 10px; font-weight: 800; letter-spacing: .2em; }
+.card-pile-back { display: grid; width: min(100%, 95px); aspect-ratio: 2.5 / 3.5; margin: auto; place-items: center; border: 1px solid rgba(255,205,235,.65); border-radius: 7px; background: repeating-linear-gradient(45deg, rgba(255,255,255,.035) 0 3px, transparent 3px 7px), linear-gradient(145deg, #572b50, #201723 72%); box-shadow: 0 8px 18px rgba(0,0,0,.3), inset 0 0 0 4px rgba(237,117,183,.13); }
+.card-pile-star { color: #ffb6df; font-size: 32px; text-shadow: 0 0 16px rgba(237,117,183,.8); }
+.card-pile-count { margin-top: -30px; color: #f8d9ed; font-size: 12px; font-weight: 800; }
+.card-pile-empty { display: grid; min-height: 90px; place-items: center; color: #847889; font-size: 11px; text-align: center; }
+.card-play-controls { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: auto; padding-top: 14px; }
+.card-play-controls p, .card-rule-copy { margin: 0; color: #b9abbc; font-size: 11px; line-height: 1.8; }
+.card-play-controls .card-draw-button { flex: 0 0 auto; min-height: 36px; }
+.card-redraw-controls { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 11px; padding-top: 11px; border-top: 1px solid rgba(236,194,224,.08); }
+.card-redraw-controls p { margin: 0; color: #cbb6c9; font-size: 10px; line-height: 1.7; }
+.card-redraw-controls .card-end-button { flex: 0 0 auto; min-height: 36px; border-color: rgba(237,117,183,.36); color: #e6bed8; }
+.discard-top-card { position: relative; display: grid; min-height: 135px; place-items: center; }
+.discard-top-card .playing-card { width: min(100%, 95px); cursor: default; }
+.discard-top-card .playing-card:hover { transform: none; }
+.discard-top-card > span { position: absolute; right: 0; bottom: 0; color: #9c8d9e; font-size: 9px; }
+.joker-assignment { display: flex; align-items: center; gap: 9px 16px; flex-wrap: wrap; margin-top: 14px; padding: 11px 13px; border: 1px dashed rgba(237,117,183,.25); background: rgba(237,117,183,.04); }
+.joker-assignment > p { flex: 1 0 100%; margin: 0; color: #d8b7d0; font-size: 10px; }
+.joker-assignment-row { display: flex; align-items: end; gap: 9px; }
+.joker-assignment-row > strong { padding-bottom: 8px; color: #f0a7d0; font-size: 11px; }
+.joker-assignment-row select { min-width: 88px; }
+.card-resolution { display: grid; gap: 12px; border-color: rgba(237,117,183,.28); background: linear-gradient(145deg, rgba(46,27,43,.48), rgba(10,8,13,.2)); }
+.card-skill-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 9px; }
+.card-skill-options > p { grid-column: 1 / -1; margin: 0; color: #cbb9cc; font-size: 11px; }
+.card-skill-option { display: grid; gap: 4px; min-height: 56px; padding: 9px 12px; border: 1px solid rgba(236,194,224,.16); background: rgba(255,255,255,.025); color: #ead9e7; text-align: left; cursor: pointer; }
+.card-skill-option strong { color: #f3a5d0; font-size: 12px; }
+.card-skill-option span { color: #a99aab; font-size: 10px; }
+.card-skill-option:hover, .card-skill-option.is-chosen { border-color: rgba(237,117,183,.62); background: rgba(237,117,183,.1); }
+.card-resolution-hint { margin: 0; color: #af9bb0; font-size: 11px; }
+.card-skill-result { padding: 15px 17px; border-left: 2px solid #ed75b7; background: rgba(237,117,183,.055); }
+.card-skill-result h3 { margin: 5px 0 8px; color: #ffe5f4; font: 700 19px/1.3 var(--serif); }
+.card-skill-result > p { margin: 0; color: #e0d1e1; font-size: 12px; line-height: 1.9; }
+.skill-options-row { display: flex; gap: 10px; align-items: end; margin: 11px 0; }
+.skill-options-row select, .skill-options-row input { min-width: 130px; }
+.card-resolve-button { justify-self: end; }
+.trap-card-panel, .card-rules-reference, .card-battle-log { display: grid; gap: 11px; }
+.card-rule-tag { padding: 4px 8px; border: 1px solid rgba(237,117,183,.2); color: #d59fc4; font-size: 9px; font-weight: 700; white-space: nowrap; }
+.trap-action-row { display: flex; align-items: end; gap: 10px; }
+.trap-action-row select { min-width: 120px; }
+.trap-reveal { display: grid; grid-template-columns: 105px minmax(0, 1fr); gap: 15px; align-items: center; padding: 12px; border: 1px solid rgba(236,194,224,.14); background: rgba(255,255,255,.025); }
+.trap-reveal > div:first-child { display: grid; justify-items: center; gap: 5px; }
+.trap-reveal .playing-card { width: 72px; cursor: default; }
+.trap-reveal .playing-card:hover { transform: none; }
+.trap-reveal > div:first-child > p { margin: 0; color: #b8aaba; font-size: 9px; }
+.trap-reveal h4 { margin: 5px 0; color: #f0d7eb; font: 700 15px var(--serif); }
+.trap-reveal > div:last-child > p { margin: 6px 0; color: #b9abbc; font-size: 11px; }
+.trap-reveal.is-triggered { border-color: rgba(134,200,154,.35); }
+.trap-reveal.is-triggered h4 { color: #a9d9b5; }
+.trap-reveal.is-missed h4 { color: #c7bdca; }
+.trap-reveal .skill-options-row { flex-wrap: wrap; }
+.card-skill-reference-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.card-skill-reference { min-height: 105px; padding: 11px 12px; border: 1px solid rgba(236,194,224,.09); background: rgba(255,255,255,.02); }
+.card-skill-reference h4 { margin: 0 0 5px; color: #f0a7d0; font: 700 15px var(--serif); }
+.card-skill-reference p, .card-skill-reference span { display: block; margin: 0; color: #d9cbd9; font-size: 10px; line-height: 1.65; }
+.card-skill-reference span { margin-top: 5px; color: #a99aab; }
+.card-battle-log h3 { margin-bottom: 9px; }
+.card-battle-log p { margin: 0; color: #97899a; font-size: 10px; }
+.card-battle-log ol { display: grid; gap: 5px; margin: 0; padding-left: 21px; color: #bdb0c0; font-size: 10px; line-height: 1.7; }
+.card-battle-log li::marker { color: #d575ae; }
+@keyframes playing-card-deal { from { opacity: 0; transform: translateY(12px) rotate(2deg) scale(.96); } to { opacity: 1; transform: translateY(0) rotate(0) scale(1); } }
 .footer-note { display: flex; justify-content: space-between; color: #b8aaba; font-size: 11px; font-weight: 600; padding: 17px 0 0; letter-spacing: .02em; }
 .footer-note span:first-child { color: #d4a6c7; }
 
@@ -385,6 +492,9 @@ body.reduce-motion *, body.reduce-motion *::before, body.reduce-motion *::after 
   .map-layout { grid-template-columns: minmax(0, 1fr) 270px; }
   .map-card { height: 560px; }
   .travel-panel { padding: 20px 16px; }
+  .playing-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .card-skill-reference-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card-pile-row { grid-template-columns: minmax(85px, .65fr) minmax(0, 3fr) minmax(85px, .65fr); gap: 8px; }
 }
 @media (max-width: 760px) {
   .topbar { height: auto; min-height: 65px; padding: 10px 18px; gap: 10px; flex-wrap: wrap; }
@@ -401,6 +511,27 @@ body.reduce-motion *, body.reduce-motion *::before, body.reduce-motion *::after 
   .people-intro-grid, .fate-clock-grid { grid-template-columns: 1fr; }
   .fate-clock-status { align-items: flex-start; flex-direction: column; gap: 7px; }
   .people-section-card { padding: 19px 16px; }
+  .card-draw-panel { gap: 11px; padding: 15px 10px; }
+  .card-draw-toolbar { align-items: flex-start; flex-direction: column; }
+  .card-draw-toolbar h2 { font-size: 18px; }
+  .card-game-actions, .card-game-settings, .card-play-controls, .card-redraw-controls, .high-low-panel, .high-low-discard { align-items: stretch; flex-direction: column; }
+  .card-game-actions, .card-game-actions > button, .card-play-controls > button, .card-redraw-controls > button, .high-low-panel > button, .high-low-discard > button { width: 100%; }
+  .card-game-settings { align-items: flex-start; }
+  .card-game-settings p { margin: 0; }
+  .card-pile-row { grid-template-columns: 1fr 1fr; }
+  .card-pile-hand { grid-column: 1 / -1; grid-row: 1; }
+  .card-pile { padding: 11px; }
+  .playing-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .playing-card-grid-pending { grid-template-columns: repeat(3, minmax(0, 100px)); }
+  .playing-card { width: min(100%, 115px); }
+  .card-skill-reference-grid { grid-template-columns: 1fr; }
+  .card-section-heading { align-items: flex-start; }
+  .card-rule-tag { white-space: normal; text-align: center; }
+  .trap-action-row, .skill-options-row { align-items: stretch; flex-direction: column; }
+  .trap-action-row > button { width: 100%; }
+  .trap-reveal { grid-template-columns: 75px minmax(0, 1fr); gap: 9px; padding: 8px; }
+  .trap-reveal .playing-card { width: 60px; }
+  .joker-assignment-row { flex-wrap: wrap; }
   .prologue-card { grid-column: auto; }
   .map-layout { grid-template-columns: 1fr; }
   .map-card { height: min(68vh, 550px); min-height: 390px; }
