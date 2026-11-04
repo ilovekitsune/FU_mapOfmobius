@@ -374,6 +374,18 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .card-draw-button:hover { background: rgba(237,117,183,.28); box-shadow: 0 0 22px rgba(237,117,183,.17); transform: translateY(-1px); }
 .card-draw-button:active { transform: translateY(0); }
 .card-draw-button:disabled, .card-end-button:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+.card-login-page { display: grid; min-height: min(60vh, 620px); place-items: center; padding: 28px 16px; }
+.card-login-card { width: min(100%, 430px); padding: 30px; border: 1px solid rgba(237,117,183,.24); background: linear-gradient(145deg, rgba(31,24,35,.96), rgba(20,16,24,.96)); box-shadow: 0 20px 70px rgba(0,0,0,.28), inset 0 0 35px rgba(237,117,183,.035); }
+.card-login-card h2 { margin: 8px 0; color: #fff0fa; font: 700 27px/1.2 var(--serif); }
+.card-login-card > p { margin: 0; color: #b9abbc; font-size: 12px; line-height: 1.8; }
+.card-login-form { display: grid; gap: 9px; margin-top: 21px; }
+.card-login-form label { margin-top: 4px; color: #e4d5e4; font-size: 11px; font-weight: 700; }
+.card-login-form input { width: 100%; min-height: 42px; padding: 8px 11px; border: 1px solid rgba(236,194,224,.2); background: rgba(10,8,13,.55); color: #f3eaf2; }
+.card-login-form input:disabled { opacity: .55; }
+.card-login-form .card-draw-button { margin-top: 5px; }
+.card-login-error { min-height: 18px; margin: 0; color: #ff9eae; font-size: 11px; line-height: 1.6; }
+.card-login-card .card-login-security-note { margin-top: 17px; color: #97899a; font-size: 10px; }
+.card-login-welcome { margin: 5px 0 0; color: #b9abbc; font-size: 10px; }
 .card-game-settings { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; padding: 13px 15px; border: 1px solid rgba(236,194,224,.09); background: rgba(10,8,13,.22); }
 .card-game-settings label, .trap-action-row label, .skill-options-row label, .joker-assignment-row label { display: grid; gap: 5px; color: #d7c8d8; font-size: 11px; font-weight: 700; }
 .card-game-settings input, .trap-action-row select, .skill-options-row select, .skill-options-row input, .joker-assignment-row select { min-height: 33px; padding: 4px 8px; border: 1px solid rgba(236,194,224,.17); border-radius: 2px; background: #17131b; color: #f3eaf2; }
@@ -444,7 +456,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .card-skill-result > p { margin: 0; color: #e0d1e1; font-size: 12px; line-height: 1.9; }
 .skill-options-row { display: flex; gap: 10px; align-items: end; margin: 11px 0; }
 .skill-options-row select, .skill-options-row input { min-width: 130px; }
-.card-resolve-button { justify-self: end; }
+.card-resolution-actions { display: flex; justify-content: flex-end; gap: 9px; }
+.card-discord-note { margin: -6px 0 0; color: #9c8b9d; font-size: 10px; }
+.card-discord-result { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 15px; border: 1px solid rgba(88,166,255,.2); background: rgba(88,166,255,.035); }
+.card-discord-result > p:first-child { margin: 0; color: #c4b5c5; font-size: 11px; }
+.card-discord-result .card-discord-note { margin-left: auto; }
 .trap-card-panel, .card-rules-reference, .card-battle-log { display: grid; gap: 11px; }
 .card-rule-tag { padding: 4px 8px; border: 1px solid rgba(237,117,183,.2); color: #d59fc4; font-size: 9px; font-weight: 700; white-space: nowrap; }
 .trap-action-row { display: flex; align-items: end; gap: 10px; }
@@ -514,8 +530,8 @@ body.reduce-motion *, body.reduce-motion *::before, body.reduce-motion *::after 
   .card-draw-panel { gap: 11px; padding: 15px 10px; }
   .card-draw-toolbar { align-items: flex-start; flex-direction: column; }
   .card-draw-toolbar h2 { font-size: 18px; }
-  .card-game-actions, .card-game-settings, .card-play-controls, .card-redraw-controls, .high-low-panel, .high-low-discard { align-items: stretch; flex-direction: column; }
-  .card-game-actions, .card-game-actions > button, .card-play-controls > button, .card-redraw-controls > button, .high-low-panel > button, .high-low-discard > button { width: 100%; }
+  .card-game-actions, .card-game-settings, .card-play-controls, .card-redraw-controls, .high-low-panel, .high-low-discard, .card-resolution-actions, .card-discord-result { align-items: stretch; flex-direction: column; }
+  .card-game-actions, .card-game-actions > button, .card-play-controls > button, .card-redraw-controls > button, .high-low-panel > button, .high-low-discard > button, .card-resolution-actions > button, .card-discord-result > button { width: 100%; }
   .card-game-settings { align-items: flex-start; }
   .card-game-settings p { margin: 0; }
   .card-pile-row { grid-template-columns: 1fr 1fr; }
