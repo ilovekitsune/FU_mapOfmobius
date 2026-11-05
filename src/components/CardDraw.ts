@@ -35,6 +35,8 @@ type TrapResult = {
   card: PlayingCard;
   declaredSuit: Suit;
   canCast: boolean;
+  level: number;
+  spellCost: number | null;
 };
 
 const suits: Suit[] = [
@@ -191,6 +193,7 @@ export class CardDraw {
   private trapResult: TrapResult | null = null;
   private log: string[] = [];
   private isAuthenticated = false;
+  private isGuest = false;
   private loginPending = false;
   private loginError = "";
   private discordMessage = "";
@@ -223,7 +226,9 @@ export class CardDraw {
       return;
     }
 
-    const cardButton = target.closest<HTMLButtonElement>("[data-card-id]");
+    const cardButton = target.closest<HTMLButtonElement>(
+      ".playing-card[data-card-id]",
+    );
     if (!cardButton || !this.started || this.pendingCards) return;
     const cardId = cardButton.dataset.cardId;
     if (!cardId || !this.hand.some((card) => card.id === cardId)) return;
@@ -313,11 +318,13 @@ export class CardDraw {
     if (action === "start") this.startConflict();
     else if (action === "end") this.endConflict();
     else if (action === "logout") this.logout();
+    else if (action === "guest") this.enterGuestMode();
     else if (action === "play") this.playCards();
     else if (action === "redraw") this.redrawCards();
     else if (action === "high-low") this.startHighLow();
     else if (action === "high-low-discard") this.finishHighLow();
     else if (action === "discord-send") this.shareResult();
+    else if (action === "discord-send-trap") this.shareTrapResult();
     else if (action === "resolve") this.finishPlay();
     else if (action.startsWith("skill:"))
       this.chooseSkill(action.slice(6) as SkillId);
@@ -496,6 +503,7 @@ export class CardDraw {
   }
 
   private shareResult(): void {
+    if (this.isGuest) return;
     const message = this.pendingCards
       ? this.createDiscordMessage(this.pendingCards, this.chosenSkill)
       : this.lastPlayResult;
@@ -503,10 +511,30 @@ export class CardDraw {
     void this.sendToDiscord(message);
   }
 
+  private shareTrapResult(): void {
+    if (this.isGuest || !this.trapResult || this.discordSending) return;
+    void this.sendToDiscord(this.createTrapDiscordMessage(this.trapResult));
+  }
+
+  private createTrapDiscordMessage(result: TrapResult): string {
+    return [
+      "【陷阱卡結果】",
+      `宣告花色：${result.declaredSuit.name} ${result.declaredSuit.symbol}`,
+      `翻開的牌：${this.cardName(result.card)}`,
+      `陷阱結果：${result.canCast ? "觸發，可免費進行一次施法行動" : "花色不符，未觸發施法效果"}`,
+      result.canCast
+        ? `陷阱卡 SL：${result.level}；法術 MP 上限：${result.level * 5}；施法狀態：${result.spellCost === null ? "尚未施法" : `已支付 ${result.spellCost} MP`}`
+        : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
+
   private logout(): void {
     this.endConflict();
     localStorage.removeItem("jwt_token");
     this.isAuthenticated = false;
+    this.isGuest = false;
     this.nickname = "";
     this.loginError = "";
     this.render();
@@ -514,6 +542,12 @@ export class CardDraw {
 
   // Discord Worker /api/send authenticates this request with a server-issued JWT.
   private async sendToDiscord(message: string): Promise<void> {
+    if (this.isGuest) {
+      this.discordMessage = "訪客模式無法傳送 Discord 訊息。";
+      this.render();
+      return;
+    }
+
     const token = localStorage.getItem("jwt_token");
     if (!token) {
       this.isAuthenticated = false;
@@ -542,6 +576,7 @@ export class CardDraw {
       if (response.status === 401 || response.status === 403) {
         localStorage.removeItem("jwt_token");
         this.isAuthenticated = false;
+        this.isGuest = false;
         this.nickname = "";
         this.loginError = "登入已失效，請重新登入後再傳送。";
       } else if (!response.ok || result.success !== true) {
@@ -562,6 +597,15 @@ export class CardDraw {
       this.render();
     }
   }
+
+  private enterGuestMode(): void {
+    if (this.loginPending) return;
+    this.isGuest = true;
+    this.nickname = "訪客";
+    this.loginError = "";
+    this.render();
+  }
+
   private async handleLogin(username: string, password: string): Promise<void> {
     if (!username || !password || this.loginPending) {
       this.loginError = "請輸入帳號與密碼。";
@@ -601,6 +645,7 @@ export class CardDraw {
         ? user.nickname
         : username;
       this.isAuthenticated = true;
+      this.isGuest = false;
       this.loginError = "";
     } catch (error) {
       this.loginError = error instanceof Error
@@ -627,15 +672,25 @@ export class CardDraw {
     }
     this.discard.push(card);
     const canCast = card.joker || card.suit.id === declaredSuit.id;
-    this.trapResult = { card, declaredSuit, canCast };
+    this.trapResult = {
+      card,
+      declaredSuit,
+      canCast,
+      level: this.trapCardLevel,
+      spellCost: null,
+    };
     this.addLog(
       `宣告${declaredSuit.name}，翻開${this.cardName(card)}並正面朝上放入棄牌堆。${canCast ? "符合條件，可免費施放法術。" : "花色不符，沒有觸發施法效果。"}`,
     );
   }
 
   private castSpell(): void {
-    const maximumCost = this.trapCardLevel * 5;
-    if (!this.trapResult?.canCast) return;
+    if (
+      !this.trapResult?.canCast ||
+      this.trapResult.spellCost !== null
+    )
+      return;
+    const maximumCost = this.trapResult.level * 5;
     if (this.spellCost > maximumCost || this.spellCost > this.mp) {
       this.addLog(
         `法術消耗須不超過 ${maximumCost} MP，且不能高於目前 MP ${this.mp}。`,
@@ -646,7 +701,7 @@ export class CardDraw {
     this.addLog(
       `免費進行一次施法行動，施放總消耗 ${this.spellCost} MP 的法術（已支付 MP）。`,
     );
-    this.trapResult = null;
+    this.trapResult.spellCost = this.spellCost;
   }
 
   private drawCards(count: number): void {
@@ -751,7 +806,7 @@ export class CardDraw {
   }
 
   private render(): void {
-    if (!this.isAuthenticated) {
+    if (!this.isAuthenticated && !this.isGuest) {
       this.renderLogin();
       return;
     }
@@ -784,7 +839,7 @@ export class CardDraw {
               : `<div class="card-skill-result"><span class="eyebrow">NO MATCHING COMBO</span><h3>未形成套牌效果</h3><p>此組牌不符合任何套牌技能，仍會棄牌並補抽。</p></div>`
           }
           <div class="card-resolution-actions">
-            <button class="card-end-button" type="button" data-action="discord-send" ${this.discordSending || (pendingSkills.length > 0 && !this.chosenSkill) ? "disabled" : ""}>傳送結果至 Discord</button>
+            ${this.isGuest ? `<p class="card-discord-note">訪客模式無法傳送 Discord 訊息。</p>` : `<button class="card-end-button" type="button" data-action="discord-send" ${this.discordSending || (pendingSkills.length > 0 && !this.chosenSkill) ? "disabled" : ""}>傳送結果至 Discord</button>`}
             <button class="card-draw-button card-resolve-button" type="button" data-action="resolve">結算並棄牌補充手牌</button>
           </div>
           ${this.discordMessage ? `<p class="card-discord-note" role="status">${this.escapeHtml(this.discordMessage)}</p>` : ""}
@@ -794,7 +849,7 @@ export class CardDraw {
     this.root.innerHTML = `
       <section class="card-draw-panel" aria-label="衝突牌組管理">
         <div class="card-draw-toolbar">
-          <div><span class="eyebrow">CONFLICT DECK · 30 CARDS</span><h2>衝突牌組管理</h2><p class="card-login-welcome">已登入${this.nickname ? `：${this.escapeHtml(this.nickname)}` : ""}</p></div>
+          <div><span class="eyebrow">CONFLICT DECK · 30 CARDS</span><h2>衝突牌組管理</h2><p class="card-login-welcome">${this.isGuest ? "訪客模式" : `已登入${this.nickname ? `：${this.escapeHtml(this.nickname)}` : ""}`}</p></div>
           <div class="card-game-actions">
             <button class="card-draw-button" type="button" data-action="start" ${this.started ? "disabled" : ""}>開始衝突・洗牌抽 5 張</button>
             <button class="card-end-button" type="button" data-action="end" ${this.started ? "" : "disabled"}>結束衝突</button>
@@ -851,7 +906,7 @@ export class CardDraw {
           !this.pendingCards && this.lastPlayResult
             ? `<section class="card-discord-result">
           <p>上次套牌結算結果已備妥，可交由 Discord 傳送函式處理。</p>
-          <button class="card-end-button" type="button" data-action="discord-send" ${this.discordSending ? "disabled" : ""}>傳送上次結果至 Discord</button>
+          ${this.isGuest ? `<p class="card-discord-note">訪客模式無法傳送 Discord 訊息。</p>` : `<button class="card-end-button" type="button" data-action="discord-send" ${this.discordSending ? "disabled" : ""}>傳送上次結果至 Discord</button>`}
           ${this.discordMessage ? `<p class="card-discord-note" role="status">${this.escapeHtml(this.discordMessage)}</p>` : ""}
         </section>`
             : ""
@@ -894,7 +949,7 @@ export class CardDraw {
         <div class="card-login-card">
           <span class="eyebrow">AUTHENTICATION · SECURE ACCESS</span>
           <h2 id="card-login-title">命運抽牌登入</h2>
-          <p>請先使用帳號與密碼登入，登入成功後才能進入牌組頁面。</p>
+          <p>可使用帳號登入傳送 Discord 訊息，或以訪客模式使用牌組功能。</p>
           <form id="card-login-form" class="card-login-form">
             <label for="card-login-username">帳號</label>
             <input id="card-login-username" name="username" type="text" autocomplete="username" required ${this.loginPending ? "disabled" : ""} />
@@ -903,7 +958,8 @@ export class CardDraw {
             <p class="card-login-error" role="alert"></p>
             <button class="card-draw-button" type="submit" ${this.loginPending ? "disabled" : ""}>${this.loginPending ? "登入中…" : "登入並進入牌組"}</button>
           </form>
-          <p class="card-login-security-note"></p>
+          <button class="card-end-button" type="button" data-action="guest" ${this.loginPending ? "disabled" : ""}>以訪客模式進入</button>
+          <p class="card-login-security-note">訪客可以使用所有牌組功能，但無法傳送 Discord 訊息。</p>
         </div>
       </section>
     `;
@@ -991,10 +1047,16 @@ export class CardDraw {
       <div><span class="eyebrow">${canCast ? "SPELL ACTION UNLOCKED" : "NO MATCH"}</span><h4>${canCast ? "陷阱觸發，可免費施法" : "花色不符，陷阱未觸發"}</h4>
         ${
           canCast
-            ? `<p>陷阱卡 SL ${this.trapCardLevel}，法術 MP 上限：${this.trapCardLevel * 5}；目前 MP：${this.mp}</p><div class="skill-options-row"><label>法術 MP 消耗<input type="number" min="0" max="${this.trapCardLevel * 5}" value="${this.spellCost}" data-field="spell-cost"></label>
+            ? `<p>陷阱卡 SL ${this.trapResult.level}，法術 MP 上限：${this.trapResult.level * 5}；目前 MP：${this.mp}</p>${this.trapResult.spellCost === null
+              ? `<div class="skill-options-row"><label>法術 MP 消耗<input type="number" min="0" max="${this.trapResult.level * 5}" value="${this.spellCost}" data-field="spell-cost"></label>
           <button class="card-draw-button" type="button" data-action="cast">支付 MP 並免費施法</button></div>`
+              : `<p>已支付 ${this.trapResult.spellCost} MP，完成一次免費施法行動。</p>`}`
             : ""
         }
+        ${this.isGuest
+          ? `<p class="card-discord-note">訪客模式無法傳送 Discord 訊息。</p>`
+          : `<button class="card-end-button" type="button" data-action="discord-send-trap" ${this.discordSending ? "disabled" : ""}>傳送陷阱卡結果至 Discord</button>`}
+        ${this.discordMessage ? `<p class="card-discord-note" role="status">${this.escapeHtml(this.discordMessage)}</p>` : ""}
       </div>
     </div>`;
   }
