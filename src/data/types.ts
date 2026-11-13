@@ -25,6 +25,11 @@ export interface CountryDetail {
   value: string;
 }
 
+export interface CountryArticle {
+  title: string;
+  file: string;
+}
+
 export interface Country {
   id: string;
   name: string;
@@ -35,6 +40,7 @@ export interface Country {
   description: string;
   color: string;
   details: CountryDetail[];
+  articles?: CountryArticle[];
 }
 
 export interface SkyIsland {
@@ -73,6 +79,7 @@ export interface SettingCard {
   eyebrow: string;
   title: string;
   className?: string;
+  status: "進行中" | "失效" | "完成" | "可領賞";
   paragraphs: SettingCardParagraph[];
 }
 

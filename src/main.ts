@@ -70,13 +70,21 @@ root.innerHTML = `
         </div>
         
         <section class="world-setting" aria-label="世界設定與故事開場">
+          <div class="setting-card-tabs" role="group" aria-label="任務卡狀態分頁">
+            ${(["進行中", "失效", "完成", "可領賞"] as const).map((status, index) => {
+              const count = settingCards.filter((card) => card.status === status).length;
+              return `<button class="setting-card-tab${index === 0 ? " is-active" : ""}" type="button" data-task-status-filter="${status}" aria-pressed="${index === 0}">${status}<span>${count}</span></button>`;
+            }).join("")}
+          </div>
           ${settingCards.map((card) => `
-            <article class="setting-card ${card.className ?? ""}">
+            <article class="setting-card ${card.className ?? ""}" data-task-status="${card.status}"${card.status !== "進行中" ? " hidden" : ""}>
               <span class="eyebrow">${card.eyebrow}</span>
               <h2>${card.title}</h2>
+              <span class="setting-card-status">${card.status}</span>
               ${card.paragraphs.map((paragraph) => `<p${paragraph.emphasis ? ' class="setting-emphasis"' : ""}>${paragraph.text}</p>`).join("")}
             </article>
           `).join("")}
+          <p class="setting-card-empty" hidden>此分類目前沒有任務卡。</p>
         </section>
         <section class="history-card" aria-label="ManaSteam 歷史年表">
           <div class="history-heading"><span class="eyebrow">舊世界留下的傷痕</span><h2>ManaSteam 編年史</h2></div>
@@ -181,6 +189,30 @@ pageViewButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const view = button.dataset.viewTarget as PageView | undefined;
     if (view) setPageView(view);
+  });
+});
+
+const taskStatusTabs = [...root.querySelectorAll<HTMLButtonElement>("[data-task-status-filter]")];
+const taskCards = [...root.querySelectorAll<HTMLElement>("[data-task-status]")];
+const taskCardsEmpty = root.querySelector<HTMLElement>(".setting-card-empty");
+taskStatusTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    const status = tab.dataset.taskStatusFilter;
+    if (!status) throw new Error("Task status tab is missing its status.");
+
+    let visibleCount = 0;
+    taskCards.forEach((card) => {
+      const isVisible = card.dataset.taskStatus === status;
+      card.hidden = !isVisible;
+      if (isVisible) visibleCount += 1;
+    });
+    taskStatusTabs.forEach((item) => {
+      const isActive = item === tab;
+      item.classList.toggle("is-active", isActive);
+      item.setAttribute("aria-pressed", String(isActive));
+    });
+    if (!taskCardsEmpty) throw new Error("Task card empty state is missing.");
+    taskCardsEmpty.hidden = visibleCount > 0;
   });
 });
 

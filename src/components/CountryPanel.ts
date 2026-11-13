@@ -1,6 +1,105 @@
 import { continents, countries, islands, settings } from "../data";
 import { getTravelOptions, getUpcomingMeeting } from "../systems/MobiusSystem";
 
+const articleContentCache = new Map<string, Promise<{ markdown: string; url: string }>>();
+
+const escapeHtml = (value: string): string =>
+  value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+const renderInlineMarkdown = (value: string, articleUrl: string): string => {
+  const placeholders: string[] = [];
+  const preserve = (html: string): string => {
+    const key = `\u0000${placeholders.length}\u0000`;
+    placeholders.push(html);
+    return key;
+  };
+  let content = value.replace(/`([^`]+)`/g, (_match, code: string) => preserve(`<code>${escapeHtml(code)}</code>`));
+  content = content.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, label: string, href: string) => {
+    try {
+      const url = new URL(href, new URL(articleUrl, window.location.href));
+      if (!["http:", "https:", "mailto:"].includes(url.protocol)) return escapeHtml(label);
+      return preserve(`<a href="${escapeHtml(url.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`);
+    } catch {
+      return escapeHtml(label);
+    }
+  });
+  content = escapeHtml(content)
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/__(.+?)__/g, "<strong>$1</strong>")
+    .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    .replace(/_(.+?)_/g, "<em>$1</em>");
+  return content.replace(/\u0000(\d+)\u0000/g, (_match, index: string) => placeholders[Number(index)]);
+};
+
+const renderMarkdown = (markdown: string, articleUrl: string): string => {
+  const output: string[] = [];
+  let paragraph: string[] = [];
+  let listType: "ul" | "ol" | undefined;
+  const flushParagraph = () => {
+    if (paragraph.length) output.push(`<p>${renderInlineMarkdown(paragraph.join(" "), articleUrl)}</p>`);
+    paragraph = [];
+  };
+  const closeList = () => {
+    if (listType) output.push(`</${listType}>`);
+    listType = undefined;
+  };
+
+  markdown.split(/\r?\n/).forEach((line) => {
+    const heading = /^(#{1,6})\s+(.+)$/.exec(line);
+    const listItem = /^\s*(?:([-*+])|(\d+)\.)\s+(.+)$/.exec(line);
+    if (heading) {
+      flushParagraph();
+      closeList();
+      const level = Math.min(heading[1].length + 2, 6);
+      output.push(`<h${level}>${renderInlineMarkdown(heading[2], articleUrl)}</h${level}>`);
+    } else if (listItem) {
+      flushParagraph();
+      const nextType = listItem[2] ? "ol" : "ul";
+      if (listType !== nextType) {
+        closeList();
+        listType = nextType;
+        output.push(`<${listType}>`);
+      }
+      output.push(`<li>${renderInlineMarkdown(listItem[3], articleUrl)}</li>`);
+    } else if (/^\s*>\s?/.test(line)) {
+      flushParagraph();
+      closeList();
+      output.push(`<blockquote><p>${renderInlineMarkdown(line.replace(/^\s*>\s?/, ""), articleUrl)}</p></blockquote>`);
+    } else if (/^\s*(---+|\*\*\*+|___+)\s*$/.test(line)) {
+      flushParagraph();
+      closeList();
+      output.push("<hr>");
+    } else if (!line.trim()) {
+      flushParagraph();
+      closeList();
+    } else {
+      closeList();
+      paragraph.push(line.trim());
+    }
+  });
+  flushParagraph();
+  closeList();
+  return output.join("");
+};
+
+const loadCountryArticle = (file: string): Promise<{ markdown: string; url: string }> => {
+  const pathParts = file.split("/");
+  if (!/^[\w.-]+(?:\/[\w.-]+)*\.md$/i.test(file) || pathParts.some((part) => part === "." || part === "..")) {
+    return Promise.reject(new Error(`文章檔名無效：${file}`));
+  }
+  const url = `${import.meta.env.BASE_URL}assets/countries/${pathParts.map(encodeURIComponent).join("/")}`;
+  const cached = articleContentCache.get(url);
+  if (cached) return cached;
+
+  const request = fetch(url).then(async (response) => {
+    if (!response.ok) throw new Error(`載入失敗（HTTP ${response.status}）`);
+    return response.text().then((markdown) => ({ markdown, url }));
+  });
+  articleContentCache.set(url, request);
+  request.catch(() => articleContentCache.delete(url));
+  return request;
+};
+
 export class CountryPanel {
   constructor(
     private detailsRoot: HTMLElement,
@@ -49,7 +148,31 @@ export class CountryPanel {
         <div class="detail-card"><span>首都</span><strong>${country.capital}</strong></div>
         <div class="detail-card"><span>現況</span><strong class="status-text">${country.status}</strong></div>
         <div class="country-details">${country.details.map((detail) => `<div class="detail-card"><span>${detail.label}</span><strong>${detail.value}</strong></div>`).join("")}</div>
+        ${country.articles?.length ? `
+          <section class="country-articles" aria-label="${country.name}設定檔文章">
+            <div class="panel-divider"></div>
+            <div class="country-articles-heading"><span class="eyebrow">COUNTRY ARCHIVE</span><h3>國家設定檔</h3></div>
+            ${country.articles.map((article, index) => `
+              <article class="country-article">
+                <h4>${article.title}</h4>
+                <div class="country-article-content" data-country-article="${index}" aria-live="polite">正在載入文章…</div>
+              </article>
+            `).join("")}
+          </section>
+        ` : ""}
         `;
+      country.articles?.forEach((article, index) => {
+        const articleRoot = this.detailsRoot.querySelector<HTMLElement>(`[data-country-article="${index}"]`);
+        if (!articleRoot) throw new Error(`Article container for "${article.title}" was not found.`);
+        loadCountryArticle(article.file).then(({ markdown, url }) => {
+          if (articleRoot.isConnected) articleRoot.innerHTML = renderMarkdown(markdown, url);
+        }).catch((error: unknown) => {
+          if (!articleRoot.isConnected) return;
+          const message = error instanceof Error ? error.message : "未知錯誤";
+          articleRoot.textContent = `文章載入失敗：${message}`;
+          articleRoot.classList.add("is-error");
+        });
+      });
     } else {
       this.detailsRoot.innerHTML = `<div class="empty-panel"><span class="empty-icon">✦</span><h2>迷失於航圖</h2><p>選擇一座大陸、國家或空島，查看它的故事。</p></div>`;
     }

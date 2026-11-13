@@ -147,5 +147,16 @@
       "latestMove": "未知",
       "originPlace": "艾倫布萊德",
       "description": "未知。"
+    }, {
+      "id": "hansin",
+      "name": "未知降臨的存在",
+      "avatar": "/assets/characters/unknown_s.png",
+      "role": "未知",
+      "status": "未知",
+      "affiliation": "未知",
+      "relationship": "反派",
+      "latestMove": "未知",
+      "originPlace": "艾倫布萊德",
+      "description": "未知。"
     }]
 }

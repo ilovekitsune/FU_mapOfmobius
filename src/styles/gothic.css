@@ -112,10 +112,19 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .intro-note { max-width: 295px; margin: 0 0 3px; color: #c6b9c8; text-align: right; font-size: 13px; font-weight: 500; line-height: 1.8; }
 
 .world-setting { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+.setting-card-tabs { grid-column: 1 / -1; display: flex; gap: 8px; border-bottom: 1px solid var(--line); }
+.setting-card-tab { display: inline-flex; align-items: center; gap: 8px; margin-bottom: -1px; padding: 9px 13px; border: 1px solid transparent; border-bottom-color: var(--line); background: transparent; color: #bfb2c2; font-size: 12px; font-weight: 700; cursor: pointer; }
+.setting-card-tab:hover, .setting-card-tab.is-active { border-color: var(--line); border-bottom-color: var(--bg); background: rgba(31,24,35,.88); color: #f0c8e3; }
+.setting-card-tab span { min-width: 20px; padding: 1px 5px; border-radius: 10px; background: rgba(237,117,183,.12); color: #ffabd7; font-size: 10px; text-align: center; }
 .setting-card { padding: 17px 18px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(31,24,35,.88), rgba(20,16,24,.88)); }
 .setting-card h2 { margin: 8px 0; font: 700 18px/1.4 var(--serif); color: #fff0fa; }
 .setting-card p { margin: 0; color: #c7bdca; font-size: 12px; font-weight: 500; line-height: 1.9; }
 .setting-card .setting-emphasis { margin-top: 9px; color: #f0b6d9; font-weight: 600; }
+.setting-card-status { display: inline-block; margin-bottom: 10px; padding: 3px 8px; border: 1px solid rgba(237,117,183,.24); color: #f0a7d0; font-size: 10px; font-weight: 700; }
+.setting-card[data-task-status="失效"] .setting-card-status { border-color: rgba(230,140,110,.3); color: #e6a184; }
+.setting-card[data-task-status="完成"] .setting-card-status { border-color: rgba(134,200,154,.3); color: #9bd6aa; }
+.setting-card[data-task-status="可領賞"] .setting-card-status { border-color: rgba(255,194,107,.32); color: #ffc26b; }
+.setting-card-empty { grid-column: 1 / -1; margin: 0; padding: 30px 16px; border: 1px dashed var(--line); color: var(--muted); font-size: 12px; text-align: center; }
 
 .map-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 15px; align-items: stretch; }
 .map-card { height: clamp(470px, 49vw, 650px); min-height: 470px; position: relative; overflow: hidden; background: #141019; border: 1px solid rgba(231, 171, 214, .15); }
@@ -209,6 +218,21 @@ button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focu
 .country-details .detail-card { gap: 12px; align-items: flex-start; }
 .country-details .detail-card span { max-width: 94px; }
 .country-details .detail-card strong { max-width: 62%; }
+.country-articles-heading { margin: 20px 0 12px; }
+.country-articles-heading h3 { margin: 5px 0 0; color: #fff0fa; font: 700 20px/1.4 var(--serif); }
+.country-article { margin-top: 12px; padding: 16px 18px; border: 1px solid var(--line); background: rgba(255,255,255,.02); }
+.country-article h4 { margin: 0 0 12px; color: #f0c8e3; font-size: 13px; font-weight: 700; }
+.country-article-content { color: #d0c5d2; font-size: 12px; font-weight: 500; line-height: 1.9; overflow-wrap: anywhere; }
+.country-article-content h3, .country-article-content h4, .country-article-content h5, .country-article-content h6 { margin: 18px 0 7px; color: #fff0fa; font: 700 16px/1.5 var(--serif); }
+.country-article-content p { margin: 0 0 12px; }
+.country-article-content ul, .country-article-content ol { margin: 0 0 12px; padding-left: 22px; }
+.country-article-content li + li { margin-top: 4px; }
+.country-article-content blockquote { margin: 12px 0; padding: 4px 12px; border-left: 2px solid rgba(237,117,183,.6); color: #c6bac9; }
+.country-article-content blockquote p { margin: 0; }
+.country-article-content code { padding: 1px 5px; background: rgba(237,117,183,.1); color: #ffc4e3; font-size: .92em; }
+.country-article-content a { color: #ffabd7; text-decoration-color: rgba(255,171,215,.5); text-underline-offset: 3px; }
+.country-article-content hr { margin: 14px 0; border: 0; border-top: 1px solid var(--line); }
+.country-article-content.is-error { color: #e6a184; }
 .dungeon-note { margin-top: 12px; padding: 11px 12px; border-left: 2px solid rgba(237,117,183,.6); background: rgba(237,117,183,.045); }
 .dungeon-note span { color: #f0a7d0; font-size: 10px; font-weight: 700; letter-spacing: .06em; }
 .dungeon-note p { margin: 5px 0 0; color: #c6bac9; font-size: 11px; font-weight: 500; line-height: 1.8; }
