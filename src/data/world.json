@@ -461,6 +461,18 @@
       "description": "迫降於艾倫布萊德的走私犯人，因為未聯絡接港且飛艇為黑戶並破壞了眾多中層設施而被中層防衛軍逮捕。",
       "locationId": "iron-blood",
       "type": "story"
+    },{
+      "day": 2,
+      "title": "核心區域激戰",
+      "description": "旅人成功阻止了未知降臨的存在，並與黑市的人們一同擊退了入侵的廢棄攝取者。",
+      "locationId": "iron-blood",
+      "type": "story"
+    },{
+      "day": 3,
+      "title": "中下層密會",
+      "description": "爐心會的領袖與中層的防衛軍隊長密會，討論著如何改變現狀。",
+      "locationId": "iron-blood",
+      "type": "story"
     },
     {
       "day": 4,

@@ -34,9 +34,12 @@ export class Timeline {
       locationButtonLabel
     } = settings.timeline;
     const timelineRange = endDay - startDay;
-    const eventDays = events
+    const eventDays = [...new Set(events
       .map((item) => item.day)
-      .filter((day) => day >= startDay && day <= endDay);
+      .filter((day) => day >= startDay && day <= endDay))]
+      .sort((left, right) => left - right);
+    const eventDaySet = new Set(eventDays);
+    const eventLaneByDay = new Map(eventDays.map((day, index) => [day, index % 2]));
     const markerDays = [...new Set([startDay, ...marks, ...eventDays, endDay])]
       .filter((day) => day >= startDay && day <= endDay)
       .sort((left, right) => left - right);
@@ -56,7 +59,11 @@ export class Timeline {
         <div class="timeline-track"><div class="timeline-progress" style="width:${progress}%"></div></div>
         <input class="timeline-range" type="range" min="${startDay}" max="${endDay}" step="${step}" value="${state.day}" aria-label="${sliderAriaLabel}" />
         <div class="timeline-marks">
-          ${markerDays.map((day) => `<button class="timeline-mark ${day === state.day ? "is-current" : ""} ${events.some((item) => item.day === day) ? "has-event" : ""}" style="left:${timelineRange === 0 ? 0 : ((day - startDay) / timelineRange) * 100}%" data-day="${day}" aria-label="${eventDayPrefix} ${day} ${dayLabel}">${day}</button>`).join("")}
+          ${markerDays.map((day) => {
+            const hasEvent = eventDaySet.has(day);
+            const eventLane = eventLaneByDay.get(day);
+            return `<button class="timeline-mark ${day === state.day ? "is-current" : ""} ${hasEvent ? `has-event event-lane-${eventLane}` : "is-milestone"}" style="left:${timelineRange === 0 ? 0 : ((day - startDay) / timelineRange) * 100}%" data-day="${day}" aria-label="${eventDayPrefix} ${day} ${dayLabel}"></button>`;
+          }).join("")}
         </div>
       </div>
       <div class="event-summary">
