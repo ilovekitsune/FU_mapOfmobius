@@ -6,7 +6,7 @@ const worldData = rawWorldData as WorldData;
 
 export const { settings, continents, countries, islands, history } = worldData;
 export const events = [...worldData.events].sort((left, right) => left.day - right.day);
-export const settingCards: SettingCard[] = settingCardsData;
+export const settingCards = settingCardsData as SettingCard[];
 export type {
   Continent,
   ContinentMeeting,
