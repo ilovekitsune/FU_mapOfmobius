@@ -59,13 +59,13 @@
     {
       "id": "lightningbird",
       "name": "『雷鳥』",
-      "avatar": "/assets/characters/unknown_s.png",
+      "avatar": "/assets/characters/korei.png",
       "role": "中層的英雄",
       "fate": "未知",
       "status": "未知",
       "affiliation": "未知",
       "relationship": "迫降時短暫交集",
-      "latestMove": "艾倫布萊德 塔底 23–33 層",
+      "latestMove": "艾倫布萊德 中段 12–22 層",
       "originPlace": "艾倫布萊德",
       "description": "未知"
     }, {
@@ -158,5 +158,27 @@
       "latestMove": "未知",
       "originPlace": "艾倫布萊德",
       "description": "未知。"
+    }, {
+      "id": "rita",
+      "name": "麗塔 塞萊斯特",
+      "avatar": "/assets/characters/rita.png",
+      "role": "塞萊斯特的千金小姐/「海鷗」的出版社主編",
+      "status": "存活",
+      "affiliation": "塞萊斯特家族/上層貴族",
+      "relationship": "友方",
+      "latestMove": "艾倫布萊德 中段 12–22 層",
+      "originPlace": "艾倫布萊德",
+      "description": "麗塔出身於上層區的貴族家庭，但她從小就不喜歡拘束的貴族生活。她天性好奇且愛冒險，常偷偷逃離僕人的看管，跑到中層甚至下層區探索，甚至曾因闖入下層區而被嚴厲懲罰；不過也正因為那些冒險，她開始對中下層人民的生活有了不同於一般貴族的理解。長大後，她雖然學會了貴族禮儀與社交規矩，表面上也成為一位端莊的淑女，但她內心仍渴望自由與新奇。後來她靠著家族給的零用錢，並得到一名商人的投資，創立了「海鷗」出版社，開始發行報紙與雜誌，將新聞、飛空艇、服裝等內容帶進整個艾倫布萊德。整體來說，她是一位「出身高貴、卻不甘平凡」的貴族少女，擁有冒險精神與改革者氣質。"
+    }, {
+      "id": "loren",
+      "name": "洛倫",
+      "avatar": "/assets/characters/loren.png",
+      "role": "艾倫布萊德地下城公會分部長",
+      "status": "存活",
+      "affiliation": "瓦爾瑟爾五大魔法貴族的旁系家族",
+      "relationship": "友方",
+      "latestMove": "艾倫布萊德 中段 12–22 層",
+      "originPlace": "瓦爾瑟爾",
+      "description": "持有冒險者名冊，單方面可查核伊澤的等級、性別、原世界座標等資訊。為瓦爾瑟爾五大魔法貴族的旁系家族成員，外派到此駐點。原本接受指令在黑市附近觀望爐心會的暴動情形，定期上報會長，若情況惡化，公會則會帶全部工作人員、通知冒險者撤離此國家。由於眾多廢棄攝取者突然襲擊黑市，加入了維安的一方。由於伊澤有配戴銅級徽章在腰帶側邊繫結處，可以一眼認出是冒險者之一。"
     }]
 }
