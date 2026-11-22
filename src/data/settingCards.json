@@ -97,6 +97,20 @@
         "emphasis": true
       }
     ]
+  },{
+    "eyebrow": "地下城公會委託",
+    "title": "尋找貓咪",
+    "className": "prologue-card",
+    "status": "進行中",
+    "paragraphs": [
+      {
+        "text": "旅人在公會接下的委託，尋找中層夫婦走失的貓咪。聽雷鳥的推測有熱源的地方有高機率可以找到貓咪。"
+      },
+      {
+        "text": "如果去中層的地下城公會分部回報的話，或許可以獲得獎勵。",
+        "emphasis": true
+      }
+    ]
   }
   
 ]
